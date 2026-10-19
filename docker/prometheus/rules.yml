@@ -1,0 +1,38 @@
+groups:
+  - name: kho-hang
+    rules:
+      - record: kho_app:http_requests:rate5m
+        expr: sum(rate(kho_http_requests_total[5m]))
+
+      - alert: AppKhongPhanHoi
+        expr: up{job="kho-app"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Ứng dụng quản lý kho không phản hồi"
+          description: "Prometheus không scrape được app:3000/metrics trong 2 phút."
+
+      - alert: MySQLKhongPhanHoi
+        expr: up{job="mysql"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "MySQL exporter không phản hồi"
+
+      - alert: TaiKhoCao
+        expr: node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"} < 0.15
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Ổ đĩa máy chủ còn dưới 15%"
+
+      - alert: BoNhoDatQuanLy
+        expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes < 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Bộ nhớ máy chủ sắp đầy"
