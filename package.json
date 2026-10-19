@@ -1,0 +1,27 @@
+{
+  "name": "quan-ly-kho-hang",
+  "version": "1.0.0",
+  "description": "Hệ thống Quản lý Kho hàng (Inventory) - Node.js + Express + EJS + MySQL",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "postinstall": "node scripts/vendor-assets.js",
+    "db:migrate": "node scripts/migrate.js",
+    "db:seed": "node scripts/seed.js"
+  },
+  "keywords": ["inventory", "warehouse", "express", "mysql"],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@fontsource/be-vietnam-pro": "^5.2.6",
+    "bcryptjs": "^3.0.2",
+    "chart.js": "^4.4.7",
+    "cookie-session": "^2.1.0",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "lucide-static": "^0.469.0",
+    "mysql2": "^3.12.0"
+  }
+}
