@@ -140,8 +140,7 @@ const html = `<!doctype html>
     <tr><td>Ngày sinh</td><td>14/08/2006</td></tr>
     <tr><td>Nhóm</td><td>5</td></tr>
     <tr><td>Môn học</td><td>Triển khai và Quản trị Hệ thống Phần mềm</td></tr>
-    <tr><td>Người hướng dẫn</td><td>....................................................</td></tr>
-    <tr><td>Đơn vị thực tập</td><td>....................................................</td></tr>
+    <tr><td>Người hướng dẫn</td><td><strong>Thầy Vũ Việt Dũng</strong></td></tr>
     <tr><td>Năm học</td><td>2025 – 2026</td></tr>
   </table>
   <div class="cover__foot">
