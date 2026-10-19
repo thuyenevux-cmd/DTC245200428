@@ -2,6 +2,7 @@
 
 const mysql = require('mysql2/promise');
 const env = require('./env');
+const metrics = require('../middleware/metrics');
 
 const pool = mysql.createPool({
   host: env.db.host,
@@ -18,8 +19,14 @@ const pool = mysql.createPool({
 });
 
 async function query(sql, params = []) {
-  const [rows] = await pool.execute(sql, params);
-  return rows;
+  metrics.trackDbQuery();
+  try {
+    const [rows] = await pool.execute(sql, params);
+    return rows;
+  } catch (err) {
+    metrics.trackDbError();
+    throw err;
+  }
 }
 
 async function one(sql, params = []) {
@@ -31,11 +38,13 @@ async function transaction(handler) {
   const conn = await pool.getConnection();
   try {
     await conn.beginTransaction();
+    metrics.trackDbQuery();
     const result = await handler(conn);
     await conn.commit();
     return result;
   } catch (err) {
     await conn.rollback();
+    metrics.trackDbError();
     throw err;
   } finally {
     conn.release();

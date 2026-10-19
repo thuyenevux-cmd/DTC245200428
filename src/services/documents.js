@@ -1,6 +1,7 @@
 'use strict';
 
 const db = require('../config/db');
+const metrics = require('../middleware/metrics');
 
 const PREFIX = { IN: 'NH', OUT: 'XH', ADJUST: 'ADJ' };
 
@@ -122,10 +123,12 @@ async function createDocument({ type, supplierId, note, lines, userId }) {
       const price = item.unitPrice !== null ? item.unitPrice : product.cost_price;
       const signed = type === 'OUT' ? -item.quantity : item.quantity;
 
+      metrics.trackDbQuery();
       await conn.execute(
         'INSERT INTO stock_movements (document_id, product_id, quantity, unit_price) VALUES (?, ?, ?, ?)',
         [documentId, item.productId, signed, price]
       );
+      metrics.trackDbQuery();
       await conn.execute(
         'UPDATE stocks SET quantity = GREATEST(0, quantity + ?) WHERE product_id = ?',
         [signed, item.productId]
