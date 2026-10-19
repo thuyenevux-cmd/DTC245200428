@@ -1,0 +1,86 @@
+<%- include('../partials/head') %>
+
+<% const isEdit = mode === 'edit'; %>
+
+<div class="page-head">
+  <div>
+    <h2><%= isEdit ? 'Sửa sản phẩm' : 'Thêm sản phẩm' %></h2>
+    <p class="page-head__desc">
+      <% if (isEdit) { %>
+        Đang sửa mã hàng <strong><%= product.sku %></strong> — tồn thực hiện tại <strong class="num"><%= format.number(product.quantity) %></strong> <%= product.unit %>.
+      <% } else { %>
+        Mã hàng mới sẽ bắt đầu với tồn thực bằng 0. Muốn có hàng trong kho, hãy ghi nhập phiếu nhập.
+      <% } %>
+    </p>
+  </div>
+  <div class="page-head__actions">
+    <a class="btn btn--ghost" href="/products">Về danh sách</a>
+  </div>
+</div>
+
+<form method="post" action="<%= isEdit ? '/products/' + product.id : '/products' %>">
+  <section class="card">
+    <div class="card__head">
+      <div>
+        <h3 class="card__title">Thông tin mã hàng</h3>
+        <p class="card__desc">Mã hàng dùng để tra cứu trong phiếu nhập, phiếu xuất và sổ kho.</p>
+      </div>
+    </div>
+    <div class="card__body">
+      <div class="form-grid">
+        <div class="field col-4">
+          <label class="field__label" for="sku">Mã hàng (SKU) <span aria-hidden="true">*</span></label>
+          <input class="input" id="sku" name="sku" value="<%= form.sku || '' %>" required aria-invalid="<%= errors.sku ? 'true' : 'false' %>" />
+          <% if (errors.sku) { %><span class="field__error"><%= errors.sku %></span><% } %>
+        </div>
+
+        <div class="field col-8">
+          <label class="field__label" for="name">Tên hàng <span aria-hidden="true">*</span></label>
+          <input class="input" id="name" name="name" value="<%= form.name || '' %>" required aria-invalid="<%= errors.name ? 'true' : 'false' %>" />
+          <% if (errors.name) { %><span class="field__error"><%= errors.name %></span><% } %>
+        </div>
+
+        <div class="field col-4">
+          <label class="field__label" for="categoryId">Nhóm hàng</label>
+          <select class="select" id="categoryId" name="categoryId">
+            <option value="">Chưa phân nhóm</option>
+            <% categories.forEach(function (c) { %>
+              <option value="<%= c.id %>" <%= String(form.categoryId) === String(c.id) ? 'selected' : '' %>><%= c.name %></option>
+            <% }); %>
+          </select>
+        </div>
+
+        <div class="field col-4">
+          <label class="field__label" for="unit">Đơn vị tính</label>
+          <input class="input" id="unit" name="unit" value="<%= form.unit || 'cái' %>" />
+        </div>
+
+        <div class="field col-4">
+          <label class="field__label" for="reorderPoint">Ngưỡng nhập lại</label>
+          <input class="input" id="reorderPoint" name="reorderPoint" type="number" min="0" step="1" value="<%= form.reorderPoint === undefined ? '' : form.reorderPoint %>" aria-invalid="<%= errors.reorderPoint ? 'true' : 'false' %>" />
+          <span class="field__hint">Tồn thực chạm ngưỡng này thì mã hàng xuất hiện ở bảng “Cần nhập gấp”.</span>
+          <% if (errors.reorderPoint) { %><span class="field__error"><%= errors.reorderPoint %></span><% } %>
+        </div>
+
+        <div class="field col-4">
+          <label class="field__label" for="costPrice">Giá vốn (VNĐ)</label>
+          <input class="input" id="costPrice" name="costPrice" type="number" min="0" step="100" value="<%= form.costPrice === undefined ? '' : form.costPrice %>" aria-invalid="<%= errors.costPrice ? 'true' : 'false' %>" />
+          <% if (errors.costPrice) { %><span class="field__error"><%= errors.costPrice %></span><% } %>
+        </div>
+
+        <div class="field col-4">
+          <label class="field__label" for="salePrice">Giá bán (VNĐ)</label>
+          <input class="input" id="salePrice" name="salePrice" type="number" min="0" step="100" value="<%= form.salePrice === undefined ? '' : form.salePrice %>" aria-invalid="<%= errors.salePrice ? 'true' : 'false' %>" />
+          <% if (errors.salePrice) { %><span class="field__error"><%= errors.salePrice %></span><% } %>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn--primary" type="submit"><%= isEdit ? 'Lưu thay đổi' : 'Thêm sản phẩm' %></button>
+        <a class="btn btn--secondary" href="/products">Huỷ</a>
+      </div>
+    </div>
+  </section>
+</form>
+
+<%- include('../partials/foot') %>

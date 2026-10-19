@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Đăng nhập · Quản lý kho hàng</title>
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/assets/fonts/be-vietnam-pro-vietnamese-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/fonts/be-vietnam-pro-vietnamese-600-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/static/css/tokens.css" />
+    <link rel="stylesheet" href="/static/css/base.css" />
+    <link rel="stylesheet" href="/static/css/components.css" />
+  </head>
+  <body>
+    <div class="auth">
+      <div class="auth__card">
+        <div class="auth__brand">
+          <span class="auth__mark" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z" />
+              <path d="m3 7.5 9 4.5 9-4.5" />
+              <path d="M12 12v9" />
+            </svg>
+          </span>
+          <span>
+            <span class="auth__title">Quản lý kho hàng</span>
+            <span class="auth__sub">Đăng nhập để tiếp tục</span>
+          </span>
+        </div>
+
+        <% if (error) { %>
+          <div class="alert alert--error" role="alert" style="margin-bottom: 16px"><%= error %></div>
+        <% } %>
+
+        <form method="post" action="/auth/login" class="stack-4">
+          <div class="field">
+            <label class="field__label" for="username">Tên đăng nhập</label>
+            <input class="input" id="username" name="username" value="<%= username %>" autocomplete="username" required autofocus />
+          </div>
+          <div class="field">
+            <label class="field__label" for="password">Mật khẩu</label>
+            <input class="input" id="password" name="password" type="password" autocomplete="current-password" required />
+          </div>
+          <button class="btn btn--primary btn--block" type="submit">Đăng nhập</button>
+        </form>
+
+        <p class="auth__hint">Tài khoản demo: <strong>admin</strong> / <strong>Kho@2026</strong></p>
+      </div>
+    </div>
+  </body>
+</html>

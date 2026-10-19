@@ -1,0 +1,148 @@
+<div class="page-head">
+  <div>
+    <h2><%= title %></h2>
+    <p class="page-head__desc">
+      <% if (showSupplier) { %>
+        Chọn nhà cung cấp và các mã hàng cần nhập. Số lượng sẽ được cộng vào tồn thực và ghi vào sổ kho.
+      <% } else { %>
+        Chọn mã hàng cần xuất và số lượng. Hệ thống sẽ chặn nếu tồn thực không đủ.
+      <% } %>
+    </p>
+  </div>
+  <div class="page-head__actions">
+    <a class="btn btn--ghost" href="<%= showSupplier ? '/stock/in' : '/stock/out' %>">Về trang phiếu</a>
+  </div>
+</div>
+
+<% if (errors && errors.form) { %>
+  <div class="alert alert--error" role="alert" style="margin-bottom: 16px"><%= errors.form %></div>
+<% } %>
+
+<form method="post" action="<%= actionUrl %>" id="stockForm">
+  <section class="card">
+    <div class="card__head">
+      <div>
+        <h3 class="card__title">Thông tin phiếu</h3>
+        <p class="card__desc">Số phiếu do hệ thống sinh tự động khi lưu.</p>
+      </div>
+    </div>
+    <div class="card__body">
+      <div class="form-grid">
+        <% if (showSupplier) { %>
+          <div class="field col-6">
+            <label class="field__label" for="supplierId">Nhà cung cấp</label>
+            <select class="select" id="supplierId" name="supplierId">
+              <option value="">Chưa chọn nhà cung cấp</option>
+              <% suppliers.forEach(function (s) { %>
+                <option value="<%= s.id %>" <%= String(form.supplierId) === String(s.id) ? 'selected' : '' %>><%= s.code %> — <%= s.name %></option>
+              <% }); %>
+            </select>
+          </div>
+        <% } %>
+        <div class="field col-6">
+          <label class="field__label" for="note">Ghi chú</label>
+          <input class="input" id="note" name="note" value="<%= form.note || '' %>" placeholder="Ví dụ: giao hàng đợt 2 trong tháng" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" style="margin-top: 16px">
+    <div class="card__head">
+      <div>
+        <h3 class="card__title">Dòng hàng</h3>
+        <p class="card__desc">Thêm từng mã hàng trong phiếu. Số lượng phải lớn hơn 0.</p>
+      </div>
+      <button class="btn btn--secondary btn--sm" type="button" id="addLine">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14" /><path d="M5 12h14" /></svg>
+        Thêm dòng
+      </button>
+    </div>
+    <div class="card__body card__body--flush">
+      <div class="table-wrap">
+        <table class="table line-table">
+          <thead>
+            <tr>
+              <th style="min-width: 240px">Mã hàng</th>
+              <th class="text-right" style="width: 150px">Số lượng</th>
+              <th class="text-right" style="width: 160px">Đơn giá (VNĐ)</th>
+              <th class="text-right" style="width: 120px">Thành tiền</th>
+              <th style="width: 48px"></th>
+            </tr>
+          </thead>
+          <tbody id="lineBody">
+            <% const rows = (lines && lines.length) ? lines : [{}]; %>
+            <% rows.forEach(function (line) { %>
+              <tr class="line-row">
+                <td>
+                  <select class="select" name="productId" aria-label="Mã hàng">
+                    <option value="">— Chọn mã hàng —</option>
+                    <% products.forEach(function (p) { %>
+                      <option value="<%= p.id %>" data-cost="<%= p.cost_price %>" data-stock="<%= p.quantity %>" data-unit="<%= p.unit %>" <%= String(line.productId) === String(p.id) ? 'selected' : '' %>>
+                        <%= p.sku %> — <%= p.name %> (tồn <%= p.quantity %>)
+                      </option>
+                    <% }); %>
+                  </select>
+                </td>
+                <td>
+                  <input class="input text-right" name="quantity" type="number" min="1" step="1" value="<%= line.quantity || '' %>" placeholder="0" aria-label="Số lượng" />
+                  <span class="field__error line-warn" hidden></span>
+                </td>
+                <td>
+                  <input class="input text-right" name="unitPrice" type="number" min="0" step="100" value="<%= line.unitPrice || '' %>" placeholder="theo giá vốn" aria-label="Đơn giá" />
+                </td>
+                <td class="text-right num line-total text-muted">—</td>
+                <td>
+                  <button class="btn btn--ghost btn--icon remove-line" type="button" aria-label="Bỏ dòng">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+                  </button>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3" class="text-right">Tổng giá trị phiếu</td>
+              <td class="text-right num" id="totalValue">0 ₫</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+    <div class="card__body" style="border-top: 1px solid var(--color-line)">
+      <div class="form-actions">
+        <button class="btn btn--primary" type="submit"><%= submitLabel %></button>
+        <a class="btn btn--secondary" href="<%= showSupplier ? '/stock/in' : '/stock/out' %>">Huỷ</a>
+      </div>
+    </div>
+  </section>
+</form>
+
+<template id="lineTemplate">
+  <tr class="line-row">
+    <td>
+      <select class="select" name="productId" aria-label="Mã hàng">
+        <option value="">— Chọn mã hàng —</option>
+        <% products.forEach(function (p) { %>
+          <option value="<%= p.id %>" data-cost="<%= p.cost_price %>" data-stock="<%= p.quantity %>" data-unit="<%= p.unit %>">
+            <%= p.sku %> — <%= p.name %> (tồn <%= p.quantity %>)
+          </option>
+        <% }); %>
+      </select>
+    </td>
+    <td>
+      <input class="input text-right" name="quantity" type="number" min="1" step="1" placeholder="0" aria-label="Số lượng" />
+      <span class="field__error line-warn" hidden></span>
+    </td>
+    <td>
+      <input class="input text-right" name="unitPrice" type="number" min="0" step="100" placeholder="theo giá vốn" aria-label="Đơn giá" />
+    </td>
+    <td class="text-right num line-total text-muted">—</td>
+    <td>
+      <button class="btn btn--ghost btn--icon remove-line" type="button" aria-label="Bỏ dòng">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+      </button>
+    </td>
+  </tr>
+</template>

@@ -1,0 +1,15 @@
+<%- include('../partials/head') %>
+
+<%- include('../partials/stock-form', {
+  title: 'Ghi xuất hàng',
+  actionUrl: '/stock/out',
+  showSupplier: false,
+  products: products,
+  suppliers: suppliers,
+  errors: errors,
+  form: form,
+  lines: lines,
+  submitLabel: 'Ghi xuất phiếu'
+}) %>
+
+<%- include('../partials/foot') %>

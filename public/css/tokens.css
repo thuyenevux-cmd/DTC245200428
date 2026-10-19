@@ -1,0 +1,153 @@
+/* ==========================================================================
+   Design tokens — Hệ thống Quản lý Kho hàng
+   Nguồn: docs/design-system.md (mọi giá trị màu đã đo tương phản WCAG 2.1)
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/assets/fonts/be-vietnam-pro-vietnamese-400-normal.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/assets/fonts/be-vietnam-pro-vietnamese-500-normal.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/assets/fonts/be-vietnam-pro-vietnamese-600-normal.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/assets/fonts/be-vietnam-pro-vietnamese-700-normal.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/assets/fonts/be-vietnam-pro-latin-400-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/assets/fonts/be-vietnam-pro-latin-500-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/assets/fonts/be-vietnam-pro-latin-600-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/assets/fonts/be-vietnam-pro-latin-700-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  /* ------------------------------- Màu sắc ------------------------------- */
+  --color-bg: #f1f4f5;
+  --color-surface: #ffffff;
+  --color-surface-alt: #e9eff0;
+  --color-ink: #0e1f22;
+  --color-ink-muted: #4c646b;
+  --color-ink-subtle: #5c6e73;
+  --color-line: #dce4e6;
+  --color-line-strong: #c4d2d5;
+  --color-control-border: #75868c;
+
+  --color-primary: #0b6b75;
+  --color-primary-strong: #09565e;
+  --color-primary-soft: #e1eff0;
+  --color-accent: #c2410c;
+  --color-accent-soft: #fcede4;
+  --color-success: #146c34;
+  --color-success-soft: #e5f3e9;
+  --color-warning: #92400e;
+  --color-warning-soft: #fbf0df;
+  --color-danger: #b42318;
+  --color-danger-soft: #fcebea;
+  --color-info: #1d4ed8;
+  --color-info-soft: #e8eefc;
+
+  --color-chart-1: #0b6b75;
+  --color-chart-2: #37838c;
+  --color-chart-3: #c2410c;
+  --color-chart-4: #9c6a16;
+  --color-chart-5: #47606b;
+
+  /* Thanh điều hướng */
+  --color-nav-bg: #0e1f22;
+  --color-nav-ink: #e4eded;
+  --color-nav-ink-muted: #9fb3b6;
+  --color-nav-active: #0b6b75;
+  --color-nav-hover: #163036;
+
+  /* ------------------------------ Typography ------------------------------ */
+  --font-sans: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, 'Segoe UI Emoji', sans-serif;
+  --fs-h1: 28px;
+  --fs-h2: 20px;
+  --fs-h3: 16px;
+  --fs-body: 14px;
+  --fs-small: 13px;
+  --fs-caption: 12px;
+  --lh-tight: 1.25;
+  --lh-heading: 1.35;
+  --lh-body: 1.6;
+
+  /* --------------------------- Layout & hình khối -------------------------- */
+  --sidebar-w: 248px;
+  --sidebar-w-collapsed: 68px;
+  --topbar-h: 56px;
+  --content-max: 1360px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+  --border-w: 1px;
+  --shadow-sm: 0 1px 2px rgba(14, 31, 34, 0.06);
+  --shadow-md: 0 8px 24px rgba(14, 31, 34, 0.1);
+
+  /* ------------------------------ Chuyển động ------------------------------ */
+  --dur-fast: 120ms;
+  --dur-base: 180ms;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (max-width: 1080px) {
+  :root {
+    --fs-h1: 24px;
+  }
+}

@@ -1,0 +1,59 @@
+<%- include('../partials/head') %>
+
+<% const isEdit = mode === 'edit'; %>
+
+<div class="page-head">
+  <div>
+    <h2><%= isEdit ? 'Sửa nhà cung cấp' : 'Thêm nhà cung cấp' %></h2>
+    <p class="page-head__desc">Thông tin này hiển thị trên phiếu nhập và trong danh sách nhà cung cấp.</p>
+  </div>
+  <div class="page-head__actions">
+    <a class="btn btn--ghost" href="/suppliers">Về danh sách</a>
+  </div>
+</div>
+
+<form method="post" action="<%= isEdit ? '/suppliers/' + supplier.id : '/suppliers' %>">
+  <section class="card">
+    <div class="card__head">
+      <div><h3 class="card__title">Thông tin nhà cung cấp</h3></div>
+    </div>
+    <div class="card__body">
+      <div class="form-grid">
+        <div class="field col-4">
+          <label class="field__label" for="code">Mã nhà cung cấp <span aria-hidden="true">*</span></label>
+          <input class="input" id="code" name="code" value="<%= form.code || '' %>" required aria-invalid="<%= errors.code ? 'true' : 'false' %>" />
+          <% if (errors.code) { %><span class="field__error"><%= errors.code %></span><% } %>
+        </div>
+
+        <div class="field col-8">
+          <label class="field__label" for="name">Tên nhà cung cấp <span aria-hidden="true">*</span></label>
+          <input class="input" id="name" name="name" value="<%= form.name || '' %>" required aria-invalid="<%= errors.name ? 'true' : 'false' %>" />
+          <% if (errors.name) { %><span class="field__error"><%= errors.name %></span><% } %>
+        </div>
+
+        <div class="field col-4">
+          <label class="field__label" for="phone">Số điện thoại</label>
+          <input class="input" id="phone" name="phone" value="<%= form.phone || '' %>" />
+        </div>
+
+        <div class="field col-4">
+          <label class="field__label" for="email">Email</label>
+          <input class="input" id="email" name="email" type="email" value="<%= form.email || '' %>" aria-invalid="<%= errors.email ? 'true' : 'false' %>" />
+          <% if (errors.email) { %><span class="field__error"><%= errors.email %></span><% } %>
+        </div>
+
+        <div class="field col-12">
+          <label class="field__label" for="address">Địa chỉ</label>
+          <input class="input" id="address" name="address" value="<%= form.address || '' %>" />
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn--primary" type="submit"><%= isEdit ? 'Lưu thay đổi' : 'Thêm nhà cung cấp' %></button>
+        <a class="btn btn--secondary" href="/suppliers">Huỷ</a>
+      </div>
+    </div>
+  </section>
+</form>
+
+<%- include('../partials/foot') %>

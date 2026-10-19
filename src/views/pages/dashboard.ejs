@@ -1,0 +1,245 @@
+<%- include('../partials/head') %>
+
+<% const s = data.summary; const io = data.inOut30; const c = data.counts30; %>
+<% const totalByCategory = data.byCategory.reduce((sum, r) => sum + Number(r.value || 0), 0) || 1; %>
+
+<div class="page-head">
+  <div>
+    <h2>Tổng quan kho</h2>
+    <p class="page-head__desc">
+      Số liệu tính trực tiếp từ sổ kho. Nhập và xuất trong 30 ngày qua:
+      <strong class="num"><%= format.number(io.units_in) %></strong> đơn vị nhập và
+      <strong class="num"><%= format.number(io.units_out) %></strong> đơn vị xuất.
+    </p>
+  </div>
+  <div class="page-head__actions">
+    <a class="btn btn--secondary" href="/stock/out">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V9" /><path d="m7 14 5-5 5 5" /><path d="M5 3h14" /></svg>
+      Ghi xuất hàng
+    </a>
+    <a class="btn btn--primary" href="/stock/in">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12" /><path d="m7 10 5 5 5-5" /><path d="M5 21h14" /></svg>
+      Ghi nhập hàng
+    </a>
+  </div>
+</div>
+
+<section class="kpi-grid" aria-label="Chỉ số chính">
+  <article class="kpi">
+    <div class="kpi__top">
+      <span class="kpi__label">Mã hàng đang quản lý</span>
+      <span class="kpi__icon" aria-hidden="true">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7 12 3l8 4-8 4z" /><path d="M4 7v10l8 4 8-4V7" /><path d="M12 11v10" /></svg>
+      </span>
+    </div>
+    <span class="kpi__value"><%= format.number(s.product_count) %></span>
+    <span class="kpi__meta"><%= format.number(s.total_units) %> đơn vị đang tồn</span>
+  </article>
+
+  <article class="kpi">
+    <div class="kpi__top">
+      <span class="kpi__label">Giá trị tồn kho</span>
+      <span class="kpi__icon" aria-hidden="true">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20" /><path d="M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
+      </span>
+    </div>
+    <span class="kpi__value"><%= format.currency(s.stock_value) %></span>
+    <span class="kpi__meta">Theo giá vốn của từng mã hàng</span>
+  </article>
+
+  <article class="kpi">
+    <div class="kpi__top">
+      <span class="kpi__label">Cần nhập gấp</span>
+      <span class="kpi__icon kpi__icon--warning" aria-hidden="true">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4" /><path d="M12 17h.01" /><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" /></svg>
+      </span>
+    </div>
+    <span class="kpi__value"><%= format.number(s.low_stock) %></span>
+    <span class="kpi__meta">mã hàng đã chạm ngưỡng nhập lại</span>
+  </article>
+
+  <article class="kpi">
+    <div class="kpi__top">
+      <span class="kpi__label">Phiếu 30 ngày</span>
+      <span class="kpi__icon kpi__icon--accent" aria-hidden="true">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h11l5 5v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z" /><path d="M14 4v5h5" /></svg>
+      </span>
+    </div>
+    <span class="kpi__value"><%= format.number(Number(c.documents_in || 0) + Number(c.documents_out || 0)) %></span>
+    <span class="kpi__meta"><%= format.number(c.documents_in || 0) %> phiếu nhập · <%= format.number(c.documents_out || 0) %> phiếu xuất</span>
+  </article>
+</section>
+
+<div class="grid-2" style="margin-top: 24px">
+  <section class="card">
+    <div class="card__head">
+      <div>
+        <h3 class="card__title">Biến động nhập xuất</h3>
+        <p class="card__desc">Số đơn vị theo từng ngày trong 30 ngày gần nhất</p>
+      </div>
+      <div class="legend" style="margin: 0">
+        <span class="legend__item"><span class="legend__dot" style="background: var(--color-chart-1)"></span>Nhập</span>
+        <span class="legend__item"><span class="legend__dot" style="background: var(--color-chart-3)"></span>Xuất</span>
+      </div>
+    </div>
+    <div class="card__body">
+      <div class="chart-box">
+        <canvas id="chartTrend" aria-label="Biểu đồ cột biến động nhập xuất 30 ngày" role="img"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card__head">
+      <div>
+        <h3 class="card__title">Cơ cấu giá trị tồn</h3>
+        <p class="card__desc">Theo nhóm hàng</p>
+      </div>
+    </div>
+    <div class="card__body">
+      <% if (!data.byCategory.length) { %>
+        <p class="text-muted text-sm">Chưa có dữ liệu tồn kho.</p>
+      <% } else { %>
+        <div class="value-list">
+          <% data.byCategory.slice(0, 7).forEach(function (row, index) { %>
+            <div class="value-list__row">
+              <span class="legend__dot" style="background: var(--color-chart-<%= (index % 5) + 1 %>)"></span>
+              <span class="value-list__name"><%= row.category_name %></span>
+              <span class="value-list__bar">
+                <span style="width: <%= Math.round((Number(row.value) / totalByCategory) * 100) %>%; background: var(--color-chart-<%= (index % 5) + 1 %>)"></span>
+              </span>
+              <span class="value-list__value"><%= format.currency(row.value) %></span>
+            </div>
+          <% }); %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+</div>
+
+<div class="grid-2" style="margin-top: 24px">
+  <section class="card">
+    <div class="card__head">
+      <div>
+        <h3 class="card__title">Cần nhập gấp</h3>
+        <p class="card__desc">Tồn thực đã chạm hoặc thấp hơn ngưỡng nhập lại</p>
+      </div>
+      <a class="btn btn--ghost btn--sm" href="/stock?filter=low">Xem tồn kho</a>
+    </div>
+    <div class="card__body card__body--flush">
+      <% if (!data.lowStock.length) { %>
+        <div class="empty">
+          <div class="empty__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="m8.5 12.5 2.5 2.5 4.5-5" /></svg>
+          </div>
+          <p class="empty__title">Chưa có mã hàng dưới ngưỡng</p>
+          <p class="empty__text">Tất cả mã hàng đang có số lượng lớn hơn ngưỡng nhập lại.</p>
+        </div>
+      <% } else { %>
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Mã hàng</th>
+                <th>Tên hàng</th>
+                <th class="text-right">Tồn thực</th>
+                <th class="text-right">Ngưỡng</th>
+                <th class="text-right">Nên nhập</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% data.lowStock.forEach(function (row) { %>
+                <tr>
+                  <td class="table__code"><%= row.sku %></td>
+                  <td>
+                    <%= row.name %>
+                    <div class="table__sub"><%= row.category_name || 'Chưa phân nhóm' %></div>
+                  </td>
+                  <td class="text-right num"><%= format.number(row.quantity) %> <span class="text-subtle"><%= row.unit %></span></td>
+                  <td class="text-right num text-muted"><%= format.number(row.reorder_point) %></td>
+                  <td class="text-right num strong" style="color: var(--color-accent)"><%= format.number(row.suggested_qty) %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card__head">
+      <div>
+        <h3 class="card__title">Phiếu gần đây</h3>
+        <p class="card__desc">6 phiếu được tạo gần nhất</p>
+      </div>
+    </div>
+    <div class="card__body card__body--flush">
+      <% if (!data.recentDocuments.length) { %>
+        <div class="empty">
+          <p class="empty__title">Chưa có phiếu nào</p>
+          <p class="empty__text">Ghi nhập hàng để tạo phiếu đầu tiên.</p>
+        </div>
+      <% } else { %>
+        <div class="value-list" style="padding: 8px 16px">
+          <% data.recentDocuments.forEach(function (doc) { const type = format.documentType(doc.type); %>
+            <div class="value-list__row">
+              <span class="chip chip--<%= type.key %>"><%= type.label %></span>
+              <span class="value-list__name">
+                <strong class="num"><%= doc.code %></strong>
+                <span class="table__sub"><%= doc.line_count %> dòng · <%= format.dateTime(doc.created_at) %></span>
+              </span>
+              <span class="value-list__value"><%= format.currency(doc.total_value) %></span>
+            </div>
+          <% }); %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+</div>
+
+<section class="card" style="margin-top: 24px">
+  <div class="card__head">
+    <div>
+      <h3 class="card__title">Mã hàng giá trị tồn cao nhất</h3>
+      <p class="card__desc">Sắp xếp theo giá trị tồn = số lượng × giá vốn</p>
+    </div>
+    <a class="btn btn--ghost btn--sm" href="/products">Xem danh mục</a>
+  </div>
+  <div class="card__body card__body--flush">
+    <% if (!data.topProducts.length) { %>
+      <div class="empty"><p class="empty__title">Chưa có tồn kho</p></div>
+    <% } else { %>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Mã hàng</th>
+              <th>Tên hàng</th>
+              <th class="text-right">Tồn thực</th>
+              <th class="text-right">Giá trị tồn</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% data.topProducts.forEach(function (row) { %>
+              <tr>
+                <td class="table__code"><%= row.sku %></td>
+                <td><%= row.name %></td>
+                <td class="text-right num"><%= format.number(row.quantity) %> <span class="text-subtle"><%= row.unit %></span></td>
+                <td class="text-right num strong"><%= format.currency(row.stock_value) %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<script>
+  window.__KHO_TREND__ = <%- JSON.stringify(data.trend.map(function (r) {
+    return { day: r.day, units_in: Number(r.units_in), units_out: Number(r.units_out) };
+  })) %>;
+</script>
+
+<%- include('../partials/foot') %>

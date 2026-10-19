@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= title %> · <%= appName %></title>
+    <meta name="description" content="Hệ thống Quản lý Kho hàng — quản lý nhập xuất, tồn kho và nhà cung cấp." />
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/assets/fonts/be-vietnam-pro-vietnamese-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/fonts/be-vietnam-pro-vietnamese-600-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/static/css/tokens.css" />
+    <link rel="stylesheet" href="/static/css/base.css" />
+    <link rel="stylesheet" href="/static/css/components.css" />
+  </head>
+  <body>
+    <div class="app-shell" id="appShell">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar__brand">
+          <span class="sidebar__mark" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z" />
+              <path d="m3 7.5 9 4.5 9-4.5" />
+              <path d="M12 12v9" />
+            </svg>
+          </span>
+          <span>
+            <span class="sidebar__title">Quản lý kho hàng</span>
+            <span class="sidebar__subtitle">K23C · DTC245200428</span>
+          </span>
+        </div>
+
+        <nav class="sidebar__nav" aria-label="Điều hướng chính">
+          <p class="nav-section">Vận hành</p>
+          <a class="nav-item <%= currentPath === '/' ? 'is-active' : '' %>" href="/">
+            <svg class="nav-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1" /><rect width="7" height="5" x="14" y="3" rx="1" /><rect width="7" height="9" x="14" y="12" rx="1" /><rect width="7" height="5" x="3" y="16" rx="1" /></svg>
+            <span>Tổng quan</span>
+          </a>
+          <a class="nav-item <%= currentPath.startsWith('/stock/in') ? 'is-active' : '' %>" href="/stock/in">
+            <svg class="nav-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12" /><path d="m7 10 5 5 5-5" /><path d="M5 21h14" /></svg>
+            <span>Nhập hàng</span>
+          </a>
+          <a class="nav-item <%= currentPath.startsWith('/stock/out') ? 'is-active' : '' %>" href="/stock/out">
+            <svg class="nav-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V9" /><path d="m7 14 5-5 5 5" /><path d="M5 3h14" /></svg>
+            <span>Xuất hàng</span>
+          </a>
+
+          <p class="nav-section">Danh mục</p>
+          <a class="nav-item <%= currentPath.startsWith('/stock') && !currentPath.startsWith('/stock/in') && !currentPath.startsWith('/stock/out') ? 'is-active' : '' %>" href="/stock">
+            <svg class="nav-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z" /><path d="m3 7.5 9 4.5 9-4.5" /><path d="M12 12v9" /></svg>
+            <span>Tồn kho</span>
+          </a>
+          <a class="nav-item <%= currentPath.startsWith('/products') ? 'is-active' : '' %>" href="/products">
+            <svg class="nav-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7 12 3l8 4-8 4z" /><path d="M4 7v10l8 4 8-4V7" /><path d="M12 11v10" /></svg>
+            <span>Sản phẩm</span>
+          </a>
+          <a class="nav-item <%= currentPath.startsWith('/suppliers') ? 'is-active' : '' %>" href="/suppliers">
+            <svg class="nav-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18" /><path d="M5 21V7l7-4 7 4v14" /><path d="M9 9h1" /><path d="M14 9h1" /><path d="M9 13h1" /><path d="M14 13h1" /><path d="M10 21v-4h4v4" /></svg>
+            <span>Nhà cung cấp</span>
+          </a>
+          <a class="nav-item <%= currentPath.startsWith('/movements') ? 'is-active' : '' %>" href="/movements">
+            <svg class="nav-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l3 2" /></svg>
+            <span>Lịch sử giao dịch</span>
+          </a>
+        </nav>
+
+        <div class="sidebar__footer">
+          Triển khai bằng Docker Compose · MySQL 8
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <header class="topbar">
+          <button class="btn btn--secondary btn--icon topbar__toggle" id="navToggle" type="button" aria-label="Mở menu" aria-expanded="false" aria-controls="sidebar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16" /><path d="M4 12h16" /><path d="M4 18h16" /></svg>
+          </button>
+          <h1 class="topbar__heading"><%= title %></h1>
+          <div class="topbar__spacer"></div>
+          <% if (currentUser) { %>
+            <div class="topbar__user">
+              <span class="avatar" aria-hidden="true"><%= currentUser.full_name.trim().charAt(0).toUpperCase() %></span>
+              <span class="hide-sm">
+                <%= currentUser.full_name %>
+                <span class="text-caption text-muted">· <%= currentUser.role === 'admin' ? 'Quản trị' : 'Nhân viên' %></span>
+              </span>
+              <form method="post" action="/auth/logout">
+                <button class="btn btn--ghost btn--sm" type="submit">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><path d="m16 17 5-5-5-5" /><path d="M21 12H9" /></svg>
+                  <span class="hide-sm">Đăng xuất</span>
+                </button>
+              </form>
+            </div>
+          <% } %>
+        </header>
+
+        <main class="content">

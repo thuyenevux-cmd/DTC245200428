@@ -1,0 +1,113 @@
+<%- include('../partials/head') %>
+
+<div class="page-head">
+  <div>
+    <h2>Tồn kho</h2>
+    <p class="page-head__desc">
+      Tồn thực của từng mã hàng.
+      <% if (summary && summary.negative_stock > 0) { %>
+        Có <strong><%= format.number(summary.negative_stock) %></strong> mã hàng đang âm tồn — cần kiểm tra lại sổ kho.
+      <% } %>
+    </p>
+  </div>
+  <div class="page-head__actions">
+    <a class="btn btn--secondary" href="/stock/out">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V9" /><path d="m7 14 5-5 5 5" /><path d="M5 3h14" /></svg>
+      Ghi xuất hàng
+    </a>
+    <a class="btn btn--primary" href="/stock/in">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12" /><path d="m7 10 5 5 5-5" /><path d="M5 21h14" /></svg>
+      Ghi nhập hàng
+    </a>
+  </div>
+</div>
+
+<% if (summary) { %>
+  <section class="kpi-grid" aria-label="Tổng quan tồn kho">
+    <article class="kpi">
+      <div class="kpi__top"><span class="kpi__label">Mã hàng</span></div>
+      <span class="kpi__value"><%= format.number(summary.product_count) %></span>
+      <span class="kpi__meta">đang theo dõi trong kho</span>
+    </article>
+    <article class="kpi">
+      <div class="kpi__top"><span class="kpi__label">Tổng tồn thực</span></div>
+      <span class="kpi__value"><%= format.number(summary.total_units) %></span>
+      <span class="kpi__meta">đơn vị trên tất cả mã hàng</span>
+    </article>
+    <article class="kpi">
+      <div class="kpi__top"><span class="kpi__label">Giá trị tồn</span></div>
+      <span class="kpi__value"><%= format.currency(summary.stock_value) %></span>
+      <span class="kpi__meta">theo giá vốn</span>
+    </article>
+    <article class="kpi">
+      <div class="kpi__top"><span class="kpi__label">Cần nhập gấp</span></div>
+      <span class="kpi__value"><%= format.number(summary.low_stock) %></span>
+      <span class="kpi__meta">mã hàng chạm ngưỡng nhập lại</span>
+    </article>
+  </section>
+<% } %>
+
+<form class="filters" method="get" action="/stock" style="margin-top: 24px">
+  <div class="search">
+    <span class="search__icon" aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+    </span>
+    <input class="input" type="search" name="q" value="<%= filters.q %>" placeholder="Tìm theo tên hoặc mã hàng" aria-label="Tìm trong tồn kho" />
+  </div>
+  <div class="segmented" role="group" aria-label="Lọc trạng thái tồn kho">
+    <a href="/stock" class="<%= filters.filter === 'all' ? 'is-active' : '' %>">Tất cả</a>
+    <a href="/stock?filter=low" class="<%= filters.filter === 'low' ? 'is-active' : '' %>">Sắp hết</a>
+    <a href="/stock?filter=out" class="<%= filters.filter === 'out' ? 'is-active' : '' %>">Hết hàng</a>
+  </div>
+  <button class="btn btn--secondary" type="submit">Lọc</button>
+  <% if (filters.q || filters.filter !== 'all') { %><a class="btn btn--ghost" href="/stock">Bỏ lọc</a><% } %>
+</form>
+
+<section class="card">
+  <% if (!rows.length) { %>
+    <div class="empty">
+      <div class="empty__icon" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z" /><path d="m3 7.5 9 4.5 9-4.5" /></svg>
+      </div>
+      <p class="empty__title">Không có mã hàng phù hợp</p>
+      <p class="empty__text">Đổi bộ lọc hoặc tìm theo tên khác.</p>
+    </div>
+  <% } else { %>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Mã hàng</th>
+            <th>Tên hàng</th>
+            <th>Nhóm</th>
+            <th class="text-right">Tồn thực</th>
+            <th class="text-right">Ngưỡng</th>
+            <th class="text-right">Giá trị tồn</th>
+            <th>Nhà cung cấp gần nhất</th>
+            <th>Trạng thái</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% rows.forEach(function (row) { const status = format.stockStatus(row); %>
+            <tr>
+              <td class="table__code"><%= row.sku %></td>
+              <td>
+                <%= row.name %>
+                <div class="table__sub">Cập nhật: <%= format.dateTime(row.stock_updated_at) %></div>
+              </td>
+              <td class="text-muted"><%= row.category_name || 'Chưa phân nhóm' %></td>
+              <td class="text-right num strong"><%= format.number(row.quantity) %> <span class="text-subtle"><%= row.unit %></span></td>
+              <td class="text-right num text-muted"><%= format.number(row.reorder_point) %></td>
+              <td class="text-right num"><%= format.currency(row.stock_value) %></td>
+              <td class="text-muted"><%= row.last_supplier || '—' %></td>
+              <td><span class="chip chip--<%= status.key %>"><%= status.label %></span></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <%- include('../partials/pagination', { currentPage: page, totalPages: pages, total: total, query: filters, baseUrl: '/stock' }) %>
+  <% } %>
+</section>
+
+<%- include('../partials/foot') %>

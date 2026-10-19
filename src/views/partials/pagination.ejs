@@ -1,0 +1,31 @@
+<%
+  const page = typeof currentPage !== 'undefined' ? currentPage : 1;
+  const pages = typeof totalPages !== 'undefined' ? totalPages : 1;
+  const buildUrl = (p) => {
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(query || {})) {
+      if (value !== '' && value !== null && value !== undefined && key !== 'page') params.set(key, value);
+    }
+    if (p > 1) params.set('page', p);
+    const qs = params.toString();
+    return baseUrl + (qs ? '?' + qs : '');
+  };
+%>
+<% if (pages > 1) { %>
+  <div class="pagination">
+    <span class="pagination__info">
+      Trang <%= page %> / <%= pages %> · tổng <%= format.number(total) %> bản ghi
+    </span>
+    <div class="pagination__links">
+      <a class="page-link <%= page <= 1 ? 'is-disabled' : '' %>" href="<%= buildUrl(page - 1) %>" aria-label="Trang trước">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+      </a>
+      <% for (let p = 1; p <= pages; p += 1) { %>
+        <a class="page-link <%= p === page ? 'is-active' : '' %>" href="<%= buildUrl(p) %>" <%= p === page ? 'aria-current="page"' : '' %>><%= p %></a>
+      <% } %>
+      <a class="page-link <%= page >= pages ? 'is-disabled' : '' %>" href="<%= buildUrl(page + 1) %>" aria-label="Trang sau">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+      </a>
+    </div>
+  </div>
+<% } %>

@@ -1,0 +1,77 @@
+<%- include('../partials/head') %>
+
+<div class="page-head">
+  <div>
+    <h2>Lịch sử giao dịch</h2>
+    <p class="page-head__desc">Mỗi dòng là một thay đổi số lượng đã được ghi vào sổ kho cùng phiếu tương ứng.</p>
+  </div>
+</div>
+
+<form class="filters" method="get" action="/movements">
+  <div class="search">
+    <span class="search__icon" aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+    </span>
+    <input class="input" type="search" name="q" value="<%= filters.q %>" placeholder="Tìm theo tên, mã hàng hoặc số phiếu" aria-label="Tìm giao dịch" />
+  </div>
+  <select class="select" name="type" aria-label="Lọc theo loại phiếu">
+    <option value="">Tất cả loại phiếu</option>
+    <option value="IN" <%= filters.type === 'IN' ? 'selected' : '' %>>Phiếu nhập</option>
+    <option value="OUT" <%= filters.type === 'OUT' ? 'selected' : '' %>>Phiếu xuất</option>
+    <option value="ADJUST" <%= filters.type === 'ADJUST' ? 'selected' : '' %>>Điều chỉnh</option>
+  </select>
+  <input class="input" type="date" name="from" value="<%= filters.from %>" aria-label="Từ ngày" style="width: auto" />
+  <input class="input" type="date" name="to" value="<%= filters.to %>" aria-label="Đến ngày" style="width: auto" />
+  <button class="btn btn--secondary" type="submit">Lọc</button>
+  <% if (filters.q || filters.type || filters.from || filters.to) { %><a class="btn btn--ghost" href="/movements">Bỏ lọc</a><% } %>
+</form>
+
+<section class="card">
+  <% if (!rows.length) { %>
+    <div class="empty">
+      <div class="empty__icon" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l3 2" /></svg>
+      </div>
+      <p class="empty__title">Chưa có giao dịch phù hợp</p>
+      <p class="empty__text">Điều chỉnh khoảng thời gian hoặc xoá bộ lọc để xem toàn bộ sổ kho.</p>
+    </div>
+  <% } else { %>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Thời điểm</th>
+            <th>Số phiếu</th>
+            <th>Loại</th>
+            <th>Mã hàng</th>
+            <th>Tên hàng</th>
+            <th class="text-right">Số lượng</th>
+            <th class="text-right">Đơn giá</th>
+            <th class="text-right">Thành tiền</th>
+            <th>Nhà cung cấp</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% rows.forEach(function (row) { const type = format.documentType(row.type); %>
+            <tr>
+              <td class="text-muted num"><%= format.dateTime(row.created_at) %></td>
+              <td class="table__code"><%= row.document_code %></td>
+              <td><span class="chip chip--<%= type.key %>"><%= type.label %></span></td>
+              <td class="table__code"><%= row.sku %></td>
+              <td><%= row.product_name %></td>
+              <td class="text-right num" style="color: <%= row.quantity >= 0 ? 'var(--color-primary)' : 'var(--color-accent)' %>">
+                <%= format.signedQuantity(row.quantity) %> <span class="text-subtle"><%= row.unit %></span>
+              </td>
+              <td class="text-right num text-muted"><%= format.currency(row.unit_price) %></td>
+              <td class="text-right num"><%= format.currency(row.line_value) %></td>
+              <td class="text-muted"><%= row.supplier_name || '—' %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <%- include('../partials/pagination', { currentPage: page, totalPages: pages, total: total, query: filters, baseUrl: '/movements' }) %>
+  <% } %>
+</section>
+
+<%- include('../partials/foot') %>
