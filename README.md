@@ -264,3 +264,21 @@ docker compose restart app        # khởi động lại ứng dụng
 docker compose down               # dừng toàn bộ (giữ dữ liệu)
 docker compose down -v            # dừng và xoá volume
 ```
+
+## 9. Báo cáo
+
+| Tệp | Nội dung |
+|---|---|
+| [`docs/bao-cao.md`](docs/bao-cao.md) | Nội dung báo cáo (Markdown) |
+| [`docs/bao-cao.html`](docs/bao-cao.html) | Bản trình bày A4 dùng font và màu của hệ thống |
+| [`docs/bao-cao.pdf`](docs/bao-cao.pdf) | Bản in 12 trang A4 |
+
+Sinh lại sau khi sửa nội dung:
+
+```bash
+npm install
+node scripts/build-report.js
+chrome --headless=new --no-pdf-header-footer --print-to-pdf=docs/bao-cao.pdf file://$PWD/docs/bao-cao.html
+```
+
+> `marked` nằm trong `devDependencies` nên không được cài vào image production.

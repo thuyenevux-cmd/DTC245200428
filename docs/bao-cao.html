@@ -1,0 +1,1131 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<title>Báo cáo đề tài — Hệ thống Quản lý Kho hàng</title>
+<style>
+  @font-face { font-family: 'Be Vietnam Pro'; font-weight: 400; src: url('../public/vendor/fonts/be-vietnam-pro-vietnamese-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Be Vietnam Pro'; font-weight: 500; src: url('../public/vendor/fonts/be-vietnam-pro-vietnamese-500-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Be Vietnam Pro'; font-weight: 600; src: url('../public/vendor/fonts/be-vietnam-pro-vietnamese-600-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Be Vietnam Pro'; font-weight: 700; src: url('../public/vendor/fonts/be-vietnam-pro-vietnamese-700-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Be Vietnam Pro'; font-weight: 400; src: url('../public/vendor/fonts/be-vietnam-pro-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Be Vietnam Pro'; font-weight: 600; src: url('../public/vendor/fonts/be-vietnam-pro-latin-600-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Be Vietnam Pro'; font-weight: 700; src: url('../public/vendor/fonts/be-vietnam-pro-latin-700-normal.woff2') format('woff2'); }
+
+  @page { size: A4; margin: 18mm 16mm 16mm 16mm; }
+
+  :root {
+    --ink: #0e1f22;
+    --ink-muted: #4c646b;
+    --ink-subtle: #5c6e73;
+    --line: #dce4e6;
+    --primary: #0b6b75;
+    --primary-soft: #e1eff0;
+    --bg-soft: #f1f4f5;
+    --accent: #c2410c;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    margin: 0;
+    font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif;
+    font-size: 11pt;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  /* ---------------- Bìa ---------------- */
+  .cover {
+    height: 253mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    page-break-after: always;
+    border-top: 8px solid var(--primary);
+    padding-top: 14mm;
+  }
+  .cover__school { text-align: center; }
+  .cover__school h2 { margin: 0 0 4mm; font-size: 13pt; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+  .cover__school p { margin: 0; color: var(--ink-muted); font-size: 11pt; }
+  .cover__title { text-align: center; }
+  .cover__title h1 { font-size: 26pt; line-height: 1.25; margin: 0 0 6mm; color: var(--primary); font-weight: 700; }
+  .cover__title p { font-size: 13pt; color: var(--ink-muted); margin: 0; }
+  .cover__info { width: 100%; border-collapse: collapse; margin: 0 auto; max-width: 150mm; }
+  .cover__info td { padding: 3.2mm 2mm; border-bottom: 1px solid var(--line); font-size: 11.5pt; }
+  .cover__info td:first-child { width: 42%; color: var(--ink-muted); font-weight: 500; }
+  .cover__foot { text-align: center; color: var(--ink-muted); font-size: 10.5pt; border-top: 1px solid var(--line); padding-top: 5mm; }
+
+  /* ---------------- Nội dung ---------------- */
+  h1 { font-size: 18pt; font-weight: 700; margin: 10mm 0 4mm; color: var(--ink); page-break-before: always; }
+  h1:first-of-type { page-break-before: auto; }
+  h2 { font-size: 14pt; font-weight: 600; margin: 8mm 0 3mm; color: var(--primary); page-break-after: avoid; }
+  h3 { font-size: 12pt; font-weight: 600; margin: 6mm 0 2mm; page-break-after: avoid; }
+  h4 { font-size: 11pt; font-weight: 600; margin: 4mm 0 2mm; page-break-after: avoid; }
+  p { margin: 0 0 3mm; text-align: justify; }
+  ul, ol { margin: 0 0 3mm; padding-left: 6mm; }
+  li { margin-bottom: 1.2mm; }
+  a { color: var(--primary); text-decoration: none; }
+  strong { font-weight: 600; }
+  hr { border: none; border-top: 1px solid var(--line); margin: 6mm 0; }
+  code {
+    font-family: 'Cascadia Code', Consolas, monospace; font-size: 9.5pt;
+    background: var(--bg-soft); padding: 0.6mm 1.4mm; border-radius: 3px;
+  }
+  pre {
+    background: #0e1f22; color: #e4eded; padding: 3mm 4mm; border-radius: 6px;
+    overflow: hidden; page-break-inside: avoid; font-size: 9pt; line-height: 1.5;
+    font-family: 'Cascadia Code', Consolas, monospace; white-space: pre-wrap; word-break: break-word;
+  }
+  pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+  blockquote {
+    margin: 3mm 0; padding: 2mm 4mm; border-left: 3px solid var(--primary);
+    background: var(--primary-soft); color: var(--ink); page-break-inside: avoid;
+  }
+  table {
+    width: 100%; border-collapse: collapse; margin: 3mm 0 5mm; font-size: 9.8pt;
+    page-break-inside: avoid;
+  }
+  th {
+    text-align: left; background: var(--bg-soft); color: var(--ink-muted);
+    font-weight: 600; font-size: 9pt; text-transform: uppercase; letter-spacing: .02em;
+    padding: 2mm 2.5mm; border: 1px solid var(--line);
+  }
+  td { padding: 1.8mm 2.5mm; border: 1px solid var(--line); vertical-align: top; }
+  tbody tr:nth-child(even) td { background: #fafcfc; }
+  img { max-width: 100%; page-break-inside: avoid; }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="cover__school">
+    <h2>Trường Đại học Công nghệ TP. Hồ Chí Minh</h2>
+    <p>Khoa Công nghệ Thông tin — Lớp K23C</p>
+    <p style="margin-top:2mm">BÁO CÁO ĐỀ TÀI THỰC HÀNH</p>
+  </div>
+  <div class="cover__title">
+    <h1>HỆ THỐNG QUẢN LÝ KHO HÀNG<br /><span style="font-size:15pt;color:var(--ink-muted)">(INVENTORY)</span></h1>
+    <p>Triển khai và Quản trị Hệ thống Phần mềm — Đề 5</p>
+  </div>
+  <table class="cover__info">
+    <tr><td>Họ và tên sinh viên</td><td><strong>Vũ Ngọc Anh Thuyên</strong></td></tr>
+    <tr><td>Mã sinh viên</td><td><strong>DTC245200428</strong></td></tr>
+    <tr><td>Lớp</td><td>K23C — Công nghệ Thông tin</td></tr>
+    <tr><td>Ngày sinh</td><td>14/08/2006</td></tr>
+    <tr><td>Nhóm</td><td>5</td></tr>
+    <tr><td>Môn học</td><td>Triển khai và Quản trị Hệ thống Phần mềm</td></tr>
+    <tr><td>Người hướng dẫn</td><td>....................................................</td></tr>
+    <tr><td>Đơn vị thực tập</td><td>....................................................</td></tr>
+    <tr><td>Năm học</td><td>2025 – 2026</td></tr>
+  </table>
+  <div class="cover__foot">
+    TP. Hồ Chí Minh — 2026<br />
+    <span style="font-size:9.5pt">Kho lưu trữ mã nguồn: github.com/thuyenevux-cmd/DTC245200428</span>
+  </div>
+</div>
+<h1>BÁO CÁO ĐỀ TÀI THỰC HÀNH</h1>
+<h2>HỆ THỐNG QUẢN LÝ KHO HÀNG (INVENTORY)</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Họ và tên sinh viên</strong></td>
+<td>Vũ Ngọc Anh Thuyên</td>
+</tr>
+<tr>
+<td><strong>Mã sinh viên</strong></td>
+<td>DTC245200428</td>
+</tr>
+<tr>
+<td><strong>Lớp</strong></td>
+<td>K23C — Công nghệ Thông tin</td>
+</tr>
+<tr>
+<td><strong>Ngày sinh</strong></td>
+<td>14/08/2006</td>
+</tr>
+<tr>
+<td><strong>Nhóm</strong></td>
+<td>5</td>
+</tr>
+<tr>
+<td><strong>Môn học</strong></td>
+<td>Triển khai và Quản trị Hệ thống Phần mềm</td>
+</tr>
+<tr>
+<td><strong>Tên đề tài</strong></td>
+<td>Hệ thống Quản lý Kho hàng (Inventory) — Đề 5</td>
+</tr>
+<tr>
+<td><strong>Người hướng dẫn</strong></td>
+<td>....................................................</td>
+</tr>
+<tr>
+<td><strong>Đơn vị thực tập</strong></td>
+<td>....................................................</td>
+</tr>
+<tr>
+<td><strong>Năm học</strong></td>
+<td>2025 – 2026</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>MỤC LỤC</h2>
+<ol>
+<li><a href="#1-m%E1%BB%9F-%C4%91%E1%BA%A7u">Mở đầu</a></li>
+<li><a href="#2-ph%C3%A2n-t%C3%ADch-nghi%E1%BB%87p-v%E1%BB%A5-v%C3%A0-thi%E1%BA%BFt-k%E1%BA%BF-h%E1%BB%87-th%E1%BB%91ng">Phân tích nghiệp vụ và thiết kế hệ thống</a><ul>
+<li>2.1. <a href="#21-nghi%C3%AAn-c%E1%BB%A9u-tham-kh%E1%BA%A3o">Nghiên cứu tham khảo</a></li>
+<li>2.2. <a href="#22-quy-tr%C3%ACnh-nghi%E1%BB%87p-v%E1%BB%A5">Quy trình nghiệp vụ</a></li>
+<li>2.3. <a href="#23-m%C3%B4-h%C3%ACnh-d%E1%BB%AF-li%E1%BB%87u">Mô hình dữ liệu</a></li>
+<li>2.4. <a href="#24-thi%E1%BA%BFt-k%E1%BA%BF-giao-di%E1%BB%87n--design-system">Thiết kế giao diện — Design System</a></li>
+</ul>
+</li>
+<li><a href="#3-ki%E1%BA%BFn-tr%C3%BAc-h%E1%BB%87-th%E1%BB%91ng-v%C3%A0-m%C3%B4i-tr%C6%B0%E1%BB%9Dng-tri%E1%BB%83n-khai">Kiến trúc hệ thống và môi trường triển khai</a></li>
+<li><a href="#4-k%E1%BA%BFt-qu%E1%BA%A3-tri%E1%BB%83n-khai-theo-6-y%C3%AAu-c%E1%BA%A7u-chung">Kết quả triển khai theo 6 yêu cầu chung</a><ul>
+<li>4.1. <a href="#41-m%C3%A3-ngu%E1%BB%93n-tr%C3%AAn-github-v%C3%A0-t%C3%A0i-li%E1%BB%87u-h%C6%B0%E1%BB%9Bng-d%E1%BA%ABn-ch%E1%BA%A1y">Mã nguồn trên GitHub và tài liệu hướng dẫn chạy</a></li>
+<li>4.2. <a href="#42-tri%E1%BB%83n-khai-%E1%BB%A9ng-d%E1%BB%A5ng-c%C6%A1-s%E1%BB%9F-d%E1%BB%AF-li%E1%BB%87u-v%C3%A0-c%C3%B4ng-c%E1%BB%A5-qu%E1%BA%A3n-l%C3%BD-db">Triển khai ứng dụng, cơ sở dữ liệu và công cụ quản lý DB</a></li>
+<li>4.3. <a href="#43-nginx-l%C3%A0m-reverse-proxy-k%C3%A8m-https-v%C3%A0-security-headers">Nginx làm reverse proxy kèm HTTPS và security headers</a></li>
+<li>4.4. <a href="#44-prometheus--grafana-gi%C3%A1m-s%C3%A1t-h%E1%BB%87-th%E1%BB%91ng">Prometheus + Grafana giám sát hệ thống</a></li>
+<li>4.5. <a href="#45-loki--promtail-v%C3%A0-c%C3%A1c-truy-v%E1%BA%A5n-logql">Loki + Promtail và các truy vấn LogQL</a></li>
+<li>4.6. <a href="#46-c%C3%A1c-bi%E1%BB%87n-ph%C3%A1p-hardening">Các biện pháp hardening</a></li>
+</ul>
+</li>
+<li><a href="#5-ki%E1%BB%83m-th%E1%BB%AD-v%C3%A0-%C4%91%C3%A1nh-gi%C3%A1-ch%E1%BA%A5t-l%C6%B0%E1%BB%A3ng">Kiểm thử và đánh giá chất lượng</a></li>
+<li><a href="#6-k%E1%BA%BFt-lu%E1%BA%ADn-v%C3%A0-h%C6%B0%E1%BB%9Bng-ph%C3%A1t-tri%E1%BB%83n">Kết luận và hướng phát triển</a></li>
+<li><a href="#7-t%C3%A0i-li%E1%BB%87u-tham-kh%E1%BA%A3o">Tài liệu tham khảo</a></li>
+<li><a href="#8-ph%E1%BB%A5-l%E1%BB%A5c">Phụ lục</a></li>
+</ol>
+<hr>
+<h2>1. MỞ ĐẦU</h2>
+<h3>1.1. Bối cảnh</h3>
+<p>Kho hàng là nơi tồn giữ hàng vật lý trước khi hàng đến tay người mua. Với quy mô vừa và nhỏ, việc theo dõi tồn kho thường nằm trên sổ tay hoặc file Excel: mỗi lần nhập/xuất đều phải cập nhật thủ công, dễ sai số, và không ai biết chính xác mã hàng nào sắp hết. Đề tài này xây dựng một <strong>ứng dụng web quản lý kho hàng</strong> thay thế sổ tay: mọi thay đổi số lượng đều ghi thành <strong>phiếu</strong> và <strong>dòng sổ kho</strong>, tồn kho luôn khớp với lịch sử.</p>
+<h3>1.2. Mục tiêu</h3>
+<ol>
+<li>Xây dựng ứng dụng web đầy đủ chức năng: nhập hàng, xuất hàng, tồn kho, nhà cung cấp, danh mục mã hàng, tra cứu lịch sử giao dịch.</li>
+<li>Lưu trữ dữ liệu trên MySQL 8, kèm công cụ quản lý phpMyAdmin.</li>
+<li>Triển khai <strong>toàn bộ</strong> dịch vụ bằng <strong>Docker Compose</strong> theo đúng yêu cầu chung của môn học.</li>
+<li>Cấu hình Nginx làm reverse proxy, có HTTPS và security headers.</li>
+<li>Tích hợp Prometheus + Grafana giám sát ứng dụng, web server và cơ sở dữ liệu.</li>
+<li>Tích hợp Loki + Promtail, truy vấn log bằng LogQL.</li>
+<li>Áp dụng các biện pháp hardening: non-root container, network isolation, mật khẩu mạnh, hạn chế quyền, security headers.</li>
+<li>Đưa mã nguồn lên GitHub với README hướng dẫn chạy và commit rõ ràng.</li>
+</ol>
+<h3>1.3. Đối tượng sử dụng</h3>
+<table>
+<thead>
+<tr>
+<th>Vai trò</th>
+<th>Nhu cầu</th>
+<th>Màn hình chính</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Quản lý kho</td>
+<td>Biết tồn thực, hàng sắp hết, giá trị tồn</td>
+<td>Tổng quan, Tồn kho</td>
+</tr>
+<tr>
+<td>Nhân viên kho</td>
+<td>Ghi nhập/xuất nhanh, ít thao tác</td>
+<td>Nhập hàng, Xuất hàng</td>
+</tr>
+<tr>
+<td>Kế toán/đối tác</td>
+<td>Tra cứu lịch sử thay đổi</td>
+<td>Lịch sử giao dịch</td>
+</tr>
+</tbody></table>
+<h3>1.4. Phạm vi và giới hạn</h3>
+<p>Hệ thống quản lý <strong>một kho duy nhất</strong>, không quản lý nhiều kho, lô/serial, barcode, đơn hàng bán ra hay kế toán tài chính. Trường <code>committed</code> (số lượng đã cam kết) được dự phòng trong cấu trúc dữ liệu nhưng chưa dùng đến, vì đề tài không yêu cầu nghiệp vụ đơn hàng.</p>
+<hr>
+<h2>2. PHÂN TÍCH NGHIỆP VỤ VÀ THIẾT KẾ HỆ THỐNG</h2>
+<h3>2.1. Nghiên cứu tham khảo</h3>
+<p>Bốn hệ thống thực tế được khảo sát (truy cập ngày 19/10/2026):</p>
+<table>
+<thead>
+<tr>
+<th>Nguồn</th>
+<th>Trạng thái</th>
+<th>Nguyên tắc rút ra</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Odoo 19 — <em>Inventory dashboards</em></td>
+<td>Truy cập được</td>
+<td>Tách dashboard thành ba lớu: vận hành hằng ngày → phân tích hiệu quả → giá trị &amp; sẵn có; cờ riêng cho <em>tồn âm</em> và <em>hàng chậm luân chuyển</em></td>
+</tr>
+<tr>
+<td>Microsoft Dynamics 365 Business Central — <em>Inventory and warehouse reports</em></td>
+<td>Truy cập được</td>
+<td>Bộ cột chuẩn cho bảng tồn: SKU, mô tả, đơn vị, vị trí, tồn thực, khả dụng, đã phân bổ, đang đến, tồn an toàn, điểm đặt hàng lại, số lượng đề xuất, nhà cung cấp, ngày PO/ngày nhận cuối</td>
+</tr>
+<tr>
+<td>StockFlow (WMS)</td>
+<td>Truy cập được</td>
+<td><strong>Phiếu là nguồn sự thật, sổ kho là hệ quả</strong>; số phiếu theo loại (<code>REC-</code>, <code>DEL-</code>, <code>ADJ-</code>); nguyên tắc &quot;mọi thay đổi số lượng đều có dấu vết&quot;; shell sidebar thu gọn được, bảng lọc/sort, toast báo kết quả</td>
+</tr>
+<tr>
+<td>StockSight (mã nguồn mở)</td>
+<td>Truy cập được</td>
+<td>Bộ chỉ số dashboard tối giản: tổng SKU, số SKU dưới ngưỡng, giá trị tồn, xu hướng biến động theo loại giao dịch, cơ cấu giá trị theo nhóm, top sản phẩm, nhật ký biến động</td>
+</tr>
+</tbody></table>
+<p><strong>Nguyên tắc được chọn để áp dụng</strong>: (1) tách bạch <em>tồn thực</em> và <em>số lượng khả dụng</em>; (2) phiếu-first với sổ kho bất biến; (3) cảnh báo gắn với con số hành động (ngưỡng nhập lại + số lượng đề xuất); (4) dashboard ưu tiên việc cần làm hôm nay.</p>
+<p>Chi tiết nguồn và những gì <strong>không</strong> sao chép được ghi trong <code>docs/research.md</code>.</p>
+<h3>2.2. Quy trình nghiệp vụ</h3>
+<pre><code>        ┌──────────────┐        ┌──────────────┐
+        │  Ghi nhập    │        │  Ghi xuất    │
+        │  hàng (IN)   │        │  hàng (OUT)  │
+        └──────┬───────┘        └──────┬───────┘
+               │                       │
+               │  kiểm tra tồn thực    │
+               │  ≥ số lượng xuất?     │
+               │                       │
+        ┌──────▼───────────────────────▼──────┐
+        │  Tạo phiếu (stock_documents)         │
+        │  + ghi dòng sổ kho (stock_movements) │
+        │  + cập nhật tồn (stocks)            │
+        │  — cùng một TRANSACTION —            │
+        └──────────────────┬────────────────────┘
+                           │
+                 ┌─────────▼─────────┐
+                 │ Tồn kho &amp; cảnh báo│
+                 │ ngưỡng nhập lại    │
+                 └────────────────────┘
+</code></pre>
+<p>Quy tắc nghiệp vụ được cài đặt:</p>
+<ul>
+<li><strong>R1</strong> — Mọi thay đổi số lượng đều sinh phiếu có số riêng, theo dạng <code>NH-2026-0001</code> (nhập), <code>XH-2026-0001</code> (xuất), <code>ADJ-2026-0001</code> (điều chỉnh).</li>
+<li><strong>R2</strong> — Tồn kho không bao giờ âm: hệ thống từ chối phiếu xuất vượt tồn, trả về thông báo nêu rõ mã hàng, số còn và số cần.</li>
+<li><strong>R3</strong> — Cập nhật tồn và ghi sổ kho nằm trong cùng một transaction: không có trường hợp tồn khớp mà thiếu dấu vết.</li>
+<li><strong>R4</strong> — Mỗi mã hàng có <em>ngưỡng nhập lại</em>; khi tồn thực ≤ ngưỡng, mã hàng xuất hiện ở bảng <strong>Cần nhập gấp</strong> kèm số lượng đề xuất = <code>ngưỡng × 2 − tồn thực</code> (tối thiểu 1).</li>
+<li><strong>R5</strong> — Phiếu nhập bắt buộc có nhà cung cấp; phiếu xuất không có.</li>
+</ul>
+<h3>2.3. Mô hình dữ liệu</h3>
+<p>Bảy bảng, thiết kế theo nguyên tắc &quot;phiếu là nguồn sự thật&quot;:</p>
+<pre><code>categories ──┐                      ┌── suppliers
+             ├──&lt; products &gt;──┬──────┤
+users ───────┘                │      └──&lt; stock_documents &gt;──┐
+                              │                                 │
+                       stocks (1:1)                    stock_movements (&gt;1)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Bảng</th>
+<th>Ý nghĩa</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>users</code></td>
+<td>Tài khoản đăng nhập</td>
+<td>Mật khẩu băm bằng bcrypt</td>
+</tr>
+<tr>
+<td><code>categories</code></td>
+<td>Nhóm hàng</td>
+<td>Dùng để thống kê cơ cấu giá trị tồn</td>
+</tr>
+<tr>
+<td><code>suppliers</code></td>
+<td>Nhà cung cấp</td>
+<td>Mã, tên, email, điện thoại, địa chỉ</td>
+</tr>
+<tr>
+<td><code>products</code></td>
+<td>Mã hàng</td>
+<td>SKU (duy nhất), nhóm, đơn vị tính, giá vốn, giá bán, ngưỡng nhập lại</td>
+</tr>
+<tr>
+<td><code>stocks</code></td>
+<td>Tồn thực</td>
+<td>1 dòng cho mỗi mã hàng, <code>quantity ≥ 0</code>, có cột <code>committed</code> dự phòng</td>
+</tr>
+<tr>
+<td><code>stock_documents</code></td>
+<td>Phiếu nhập/xuất/điều chỉnh</td>
+<td>Số phiếu duy nhất, tổng giá trị, người tạo</td>
+</tr>
+<tr>
+<td><code>stock_movements</code></td>
+<td>Dòng sổ kho</td>
+<td><code>quantity &gt; 0</code> = nhập, <code>&lt; 0</code> = xuất, tham chiếu phiếu và mã hàng</td>
+</tr>
+</tbody></table>
+<p>Các chỉ mục phục vụ truy vấn: <code>stock_movements(product_id, created_at)</code>, <code>stock_movements(document_id)</code>, <code>products(sku)</code>, <code>products(category_id)</code>, <code>stock_documents(type, created_at)</code>.</p>
+<h3>2.4. Thiết kế giao diện — Design System</h3>
+<p>Giao diện được thiết kế theo một hệ thống thống nhất, tài liệu đầy đủ tại <code>docs/design-system.md</code>.</p>
+<p><strong>Bảng màu</strong> (đều đã đo tương phản theo WCAG 2.1):</p>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>HEX</th>
+<th>Vai trò</th>
+<th>Tương phản đo được</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>color-bg</code></td>
+<td><code>#F1F4F5</code></td>
+<td>Nền ứng dụng</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>color-surface</code></td>
+<td><code>#FFFFFF</code></td>
+<td>Bề mặt thẻ/bảng</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>color-ink</code></td>
+<td><code>#0E1F22</code></td>
+<td>Chữ chính</td>
+<td><strong>15,35 : 1</strong> trên nền</td>
+</tr>
+<tr>
+<td><code>color-ink-muted</code></td>
+<td><code>#4C646B</code></td>
+<td>Chữ phụ</td>
+<td><strong>5,68 : 1</strong></td>
+</tr>
+<tr>
+<td><code>color-primary</code></td>
+<td><code>#0B6B75</code></td>
+<td>Petrol — thương hiệu, hành động chính</td>
+<td><strong>6,22 : 1</strong> với chữ trắng</td>
+</tr>
+<tr>
+<td><code>color-accent</code></td>
+<td><code>#C2410C</code></td>
+<td>Rust — nhấn mạnh, số đề xuất nhập</td>
+<td>5,18 : 1</td>
+</tr>
+<tr>
+<td><code>color-success</code></td>
+<td><code>#146C34</code></td>
+<td>Còn hàng</td>
+<td>6,51 : 1</td>
+</tr>
+<tr>
+<td><code>color-warning</code></td>
+<td><code>#92400E</code></td>
+<td>Sắp hết</td>
+<td>7,09 : 1</td>
+</tr>
+<tr>
+<td><code>color-danger</code></td>
+<td><code>#B42318</code></td>
+<td>Hết hàng, lỗi</td>
+<td>5,70 : 1</td>
+</tr>
+<tr>
+<td><code>color-nav-bg</code></td>
+<td><code>#0E1F22</code></td>
+<td>Thanh điều hướng</td>
+<td>chữ 14,25 : 1</td>
+</tr>
+</tbody></table>
+<p><strong>Typography</strong>: <em>Be Vietnam Pro</em> (SIL OFL 1.1) — font thiết kế riêng cho tiếng Việt, tự host 8 file woff2 (subset <code>vietnamese</code> + <code>latin</code>, 4 weight), dùng chung cho tiêu đề và nội dung. Số liệu dùng <code>font-variant-numeric: tabular-nums</code> để cột số thẳng hàng. Đã kiểm chứng trực tiếp trên trình duyệt: dấu <code>ă â ê ô ơ ư đ</code> và các từ <em>Tồn kho, Phiếu nhập, Nhà cung cấp, Sắp hết</em> hiển thị đúng ở cả bốn weight.</p>
+<p><strong>Icon</strong>: bộ Lucide (ISC), vẽ nội tuyến bằng <code>currentColor</code>, stroke 1,75 — không trộn bộ, không dùng icon font.</p>
+<p><strong>Bố cục</strong>: sidebar 248 px (thu gọn được) + thanh trên 56 px + vùng nội dung tối đa 1360 px; lưới 12 cột, thang khoảng cách 4 px, bo góc 4/6/10 px, đúng 2 mức đổ bóng.</p>
+<p><strong>Giọng văn giao diện</strong>: nội dung nói đúng việc cần làm, CTA là động từ kèm đối tượng (&quot;Ghi nhập hàng&quot;, &quot;Ghi xuất hàng&quot;, &quot;Thêm sản phẩm&quot;), cấm các cụm sáo rỗng (&quot;hệ sinh thái thông minh&quot;, &quot;một cú click&quot;, &quot;tối ưu hoá tồn kho&quot;). Chi tiết tại <code>docs/brand-voice.md</code>.</p>
+<hr>
+<h2>3. KIẾN TRÚC HỆ THỐNG VÀ MÔI TRƯỜNG TRIỂN KHAI</h2>
+<h3>3.1. Môi trường triển khai</h3>
+<table>
+<thead>
+<tr>
+<th>Thành phần</th>
+<th>Phiên bản</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Máy chủ</td>
+<td>Ubuntu Server 26.04 LTS (kernel 7.0), chạy trong máy ảo VMware Workstation 17</td>
+</tr>
+<tr>
+<td>Docker Engine</td>
+<td>29.7.2 (storage driver <code>overlayfs</code>, containerd snapshotter)</td>
+</tr>
+<tr>
+<td>Docker Compose</td>
+<td>v5.4.0</td>
+</tr>
+<tr>
+<td>RAM / ổ đĩa</td>
+<td>5,36 GB · 20 GB (sau khi dọn: 5,3 GB trống)</td>
+</tr>
+</tbody></table>
+<p>Quá trình chuẩn bị môi trường ghi nhận trong báo cáo:</p>
+<ol>
+<li>Phát hiện ổ đĩa chỉ còn 1,9 GB trống (91% đã dùng) — dọn cache snap (≈1 GB), xoá bản snap cũ (≈1 GB) và thu nhỏ <code>swap.img</code> từ 3,3 GB xuống 1 GB (thu hồi 2,3 GB), đưa dung lượng trống lên <strong>5,3 GB</strong>.</li>
+<li>Tách mạng <code>kho-db</code> (internal) và <code>kho-net</code> (bridge) để MySQL không có NAT ra ngoài.</li>
+</ol>
+<h3>3.2. Sơ đồ kiến trúc</h3>
+<pre><code>   Internet / LAN
+        │  http://8080 ──(301)──► https://8443 (TLS tự ký)
+        ▼
+ ┌──────────────────┐
+ │  Nginx :8080/:8443│  reverse proxy · security headers · basic auth · TLS
+ └──┬────────┬──────┘
+    │        │                 kho-net (bridge)
+┌───▼────┐   │        ┌──────────────┬──────────────┬─────────────┐
+│ app    │   └───────►│  grafana     │  prometheus  │  loki       │
+│ :3000  │            │  :3000       │  :9090       │  :3100      │
+│ user   │            └──────────────┴──────┬───────┴─────────────┘
+│ node   │                                  │
+└───┬────┘                        ┌─────────┴──────────┐
+    │                             │  promtail :9080     │
+    │                             │  đọc Docker socket  │
+    │                             └─────────────────────┘
+    │        kho-db (internal: true — không có NAT)
+┌───▼──────────┬──────────────┬──────────────────┐
+│ mysql :3306  │ phpmyadmin   │ mysql-exporter   │
+│ (không mở    │ :80          │ :9104            │
+│  port host)  │              │                  │
+└──────────────┴──────────────┴──────────────────┘
+</code></pre>
+<p><strong>Quyết định thiết kế quan trọng</strong>: chỉ Nginx công khai cổng. Mọi công cụ quản trị (phpMyAdmin, Grafana, Prometheus, Loki API) đều nằm sau basic auth của Nginx và chỉ tiếp cận được qua đường dẫn có xác thực.</p>
+<h3>3.3. Cấu trúc ứng dụng</h3>
+<table>
+<thead>
+<tr>
+<th>Tầng</th>
+<th>Nội dung</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>src/config</code></td>
+<td><code>env.js</code> (nạp biến môi trường, chặn chạy production khi thiếu <code>SESSION_SECRET</code>), <code>db.js</code> (pool mysql2 + helper <code>transaction</code>)</td>
+</tr>
+<tr>
+<td><code>src/middleware</code></td>
+<td><code>auth.js</code> (đăng nhập, phân quyền), <code>flash.js</code> (thông báo một lần), <code>metrics.js</code> (bộ đếm định dạng Prometheus), <code>errors.js</code></td>
+</tr>
+<tr>
+<td><code>src/repositories</code></td>
+<td>Truy vấn danh mục (<code>catalog.js</code>) và tồn kho/sổ kho/dashboard (<code>stock.js</code>)</td>
+</tr>
+<tr>
+<td><code>src/services</code></td>
+<td><code>documents.js</code> — tạo phiếu trong transaction, kiểm tra tồn, ghi sổ kho</td>
+</tr>
+<tr>
+<td><code>src/routes</code></td>
+<td>6 nhóm route: auth, dashboard, products, suppliers, stock (gồm nhập/xuất), movements</td>
+</tr>
+<tr>
+<td><code>src/views</code></td>
+<td>EJS: <code>partials/</code> (head, sidebar, topbar, foot, pagination, stock-form) và <code>pages/</code> (9 trang)</td>
+</tr>
+<tr>
+<td><code>public</code></td>
+<td><code>css/tokens.css</code> (token), <code>base.css</code> (bố cục), <code>components.css</code> (thành phần), <code>js/app.js</code>, <code>vendor/</code> (font, Chart.js)</td>
+</tr>
+</tbody></table>
+<p>Phụ thuộc phía server chỉ gồm <code>express</code>, <code>ejs</code>, <code>mysql2</code>, <code>bcryptjs</code>, <code>cookie-session</code>, <code>dotenv</code>; phía client chỉ có Chart.js (MIT) và font/icon tự host.</p>
+<hr>
+<h2>4. KẾT QUẢ TRIỂN KHAI THEO 6 YÊU CẦU CHUNG</h2>
+<h3>4.1. Mã nguồn trên GitHub và tài liệu hướng dẫn chạy</h3>
+<ul>
+<li>Repository: <strong><code>DTC245200428</code></strong> (đặt tên theo mã sinh viên theo yêu cầu), đăng trên tài khoản GitHub <code>thuyenevux-cmd</code>.</li>
+<li>Lịch sử commit chia theo mốc rõ ràng:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Commit</th>
+<th>Nội dung</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><code>chore: khởi tạo dự án và xây dựng design system</code></td>
+<td>Cấu trúc thư mục, <code>.gitignore</code>, <code>.dockerignore</code>, <code>.env.example</code>, <code>package.json</code>, tài liệu design system / brand voice / nghiên cứu / checklist QA</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>feat: ứng dụng quản lý kho hàng (Express + EJS + MySQL)</code></td>
+<td>Schema SQL, script migrate/seed, tầng config–middleware–repository–service–route, 9 trang giao diện, token CSS, font/icon tự host</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>feat: docker compose và nginx reverse proxy kèm hardening</code></td>
+<td><code>docker-compose.yml</code> 11 service, Dockerfile nhiều tầng chạy non-root, cấu hình Nginx reverse proxy + TLS + security headers, giới hạn tài nguyên</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>feat: hệ thống giám sát Prometheus + Grafana và log tập trung Loki + Promtail</code></td>
+<td>Cấu hình scrape, luật cảnh báo, datasource + dashboard Grafana, cấu hình Loki/Promtail</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>docs: báo cáo tổng hợp, README và ảnh minh họa triển khai</code></td>
+<td>README hướng dẫn chạy đầy đủ, báo cáo ≥ 10 trang, ảnh chụp từ hệ thống đang chạy</td>
+</tr>
+</tbody></table>
+<ul>
+<li><code>README.md</code> mô tả: yêu cầu cài đặt, lệnh dựng hệ thống, danh sách URL + tài khoản, sơ đồ kiến trúc, bảng chức năng, truy vấn LogQL mẫu, bảng hardening, cấu trúc mã nguồn, bảng giấy phép tài nguyên.</li>
+</ul>
+<h3>4.2. Triển khai ứng dụng, cơ sở dữ liệu và công cụ quản lý DB</h3>
+<p>Ứng dụng chạy trong container <code>kho-app</code> (node:22-alpine, user <code>node</code> uid 1000). Lệnh khởi động:</p>
+<pre><code class="language-bash">command: [&quot;sh&quot;, &quot;-c&quot;, &quot;node scripts/ensure-db.js &amp;&amp; exec node src/server.js&quot;]
+</code></pre>
+<p><code>ensure-db.js</code> chạy migrate (tạo bảng nếu chưa có, idempotent) và chỉ nạp dữ liệu mẫu <strong>khi bảng <code>products</code> còn trống</strong> — nên khởi động lại không làm mất dữ liệu đã nhập.</p>
+<p>Kết quả kiểm chứng trên máy chủ:</p>
+<pre><code>→ Đã tạo/cập nhật bảng: categories, products, stock_documents,
+                         stock_movements, stocks, suppliers, users
+→ Hoàn tất: 28 sản phẩm, 6 nhà cung cấp, 8 nhóm hàng,
+             65 phiếu, 135 dòng sổ kho, giá trị tồn 1.838.177.000 đ
+[db] kết nối thành công kho_app@mysql:3306/kho_hang
+[web] Quản lý kho hàng chạy tại http://0.0.0.0:3000 (production)
+</code></pre>
+<p>phpMyAdmin (phiên bản 5.2.3) đăng nhập bằng tài khoản <code>kho_app</code>, hiển thị đầy đủ 7 bảng, charset <code>utf8mb4_unicode_ci</code>, MySQL 8.0.46 — ảnh chụp ở <code>docs/screenshots/12-phpmyadmin.png</code>.</p>
+<h3>4.3. Nginx làm reverse proxy kèm HTTPS và security headers</h3>
+<p>Cấu hình Nginx (<code>docker/nginx/conf.d/kho.conf</code>):</p>
+<ul>
+<li><strong>HTTP :8080</strong> trả <code>301</code> sang HTTPS :8443.</li>
+<li><strong>HTTPS :8443</strong> dùng chứng thư tự ký RSA-2048 sinh lúc khởi động container, <code>ssl_protocols TLSv1.2 TLSv1.3</code>, <code>ssl_session_cache shared:SSL:10m</code>, <code>server_tokens off</code>.</li>
+<li><strong>Security headers</strong> (đặt ở cả hai server block, <code>always</code>):</li>
+</ul>
+<pre><code>x-frame-options: SAMEORIGIN
+x-content-type-options: nosniff
+referrer-policy: strict-origin-when-cross-origin
+permissions-policy: geolocation=(), microphone=(), camera=()
+strict-transport-security: max-age=31536000
+content-security-policy: default-src &#39;self&#39;; img-src &#39;self&#39; data:;
+  style-src &#39;self&#39; &#39;unsafe-inline&#39;; script-src &#39;self&#39; &#39;unsafe-inline&#39;;
+  font-src &#39;self&#39;; connect-src &#39;self&#39;; frame-ancestors &#39;self&#39;;
+  base-uri &#39;self&#39;; form-action &#39;self&#39;
+</code></pre>
+<ul>
+<li><strong>Basic auth</strong> cho <code>/phpmyadmin/</code>, <code>/grafana/</code>, <code>/prometheus/</code>, <code>/loki/</code>; file <code>htpasswd</code> sinh bằng <code>openssl passwd -apr1</code> lúc khởi động, quyền <code>640 root:nginx</code>.</li>
+<li><code>/nginx_status</code> (stub_status) chỉ cho phép dải mạng nội bộ <code>172.16.0.0/12</code>, <code>10.0.0.0/8</code>.</li>
+</ul>
+<p>Kiểm chứng bằng <code>curl</code> trên máy chủ:</p>
+<pre><code>http 8080 -&gt; 301 (chuyển hướng HTTPS)
+https 8443 app -&gt; 302 (chuyển tới đăng nhập)
+https 8443 health -&gt; 200
+/phpmyadmin/ -&gt; không tài khoản=401 | có tài khoản=200
+/grafana/    -&gt; không tài khoản=401 | có tài khoản=200
+/prometheus/ -&gt; không tài khoản=401 | có tài khoản=200
+</code></pre>
+<h3>4.4. Prometheus + Grafana giám sát hệ thống</h3>
+<p><strong>Prometheus</strong> (v3.15.0) scrape 4 mục tiêu, tất cả đều <code>up</code>:</p>
+<pre><code>kho-app    up      (app:3000/metrics — chỉ số do chính ứng dụng xuất)
+nginx      up      (nginx-exporter:9113)
+mysql      up      (mysql-exporter:9104 — 792 chỉ số MySQL)
+node       up      (node-exporter:9100)
+</code></pre>
+<p>Bốn nhóm chỉ số mà ứng dụng tự xuất (định dạng chữ chuẩn Prometheus, không thêm thư viện):</p>
+<pre><code>kho_http_requests_total{method=&quot;GET&quot;,route=&quot;/health&quot;,status=&quot;200&quot;} 11
+kho_db_queries_total 44
+kho_stock_documents_total 65
+kho_uptime_seconds 786
+</code></pre>
+<p>Ngoài ra còn có <code>docker/prometheus/rules.yml</code> với 4 luật cảnh báo: ứng dụng không phản hồi (&gt; 2 phút), MySQL exporter không phản hồi, ổ đĩa dưới 15%, RAM dưới 10%.</p>
+<p><strong>Grafana</strong> (13.2.3) được cấu hình hoàn toàn bằng <em>provisioning</em> (không cấu hình tay): hai datasource <code>prometheus</code> và <code>loki</code>, một dashboard gồm 8 panel — lượt yêu cầu mỗi giây, tổng yêu cầu đã xử lý, thời gian ứng dụng chạy, mức dùng CPU máy chủ, bộ nhớ và ổ đĩa, kết nối và truy vấn MySQL, hoạt động cơ sở dữ liệu của ứng dụng, số mục tiêu giám sát đang hoạt động. Ảnh chụp dashboard lúc chạy thật: <code>docs/screenshots/15-grafana-dashboard.png</code> (ghi nhận 132 yêu cầu đã xử lý, CPU 32,9 %, 4/4 mục tiêu UP, 44 truy vấn DB).</p>
+<h3>4.5. Loki + Promtail và các truy vấn LogQL</h3>
+<p>Promtail (3.6.11) dùng <em>docker service discovery</em> để gom log của các container <code>kho-*</code> và đẩy sang Loki (3.6.18). Nginx được cấu hình ghi access log ra <code>/dev/stdout</code> để log truy cập cũng nằm trong Loki.</p>
+<p>Năm truy vấn LogQL đã chạy thật trên hệ thống:</p>
+<p><strong>Truy vấn 1 — số log theo container trong 15 phút</strong></p>
+<pre><code class="language-logql">sum by (container_name) (count_over_time({container_name=~&quot;kho-.*&quot;}[15m]))
+</code></pre>
+<pre><code>container_name=kho-app             = 10
+container_name=kho-grafana          = 338
+container_name=kho-loki             = 10
+container_name=kho-mysql            = 31
+container_name=kho-mysql-exporter   = 70
+container_name=kho-nginx            = 41
+container_name=kho-nginx-exporter   = 19
+container_name=kho-node-exporter    = 110
+container_name=kho-phpmyadmin       = 32
+container_name=kho-prometheus       = 186
+container_name=kho-promtail         = 2
+</code></pre>
+<p><strong>Truy vấn 2 — số lần ứng dụng khởi động trong 1 giờ</strong></p>
+<pre><code class="language-logql">count_over_time({container_name=&quot;kho-app&quot;} |= &quot;production&quot; [1h])
+→ 4
+</code></pre>
+<p><strong>Truy vấn 3 — số dòng log chứa lỗi trong toàn hệ thống</strong></p>
+<pre><code class="language-logql">sum(count_over_time({container_name=~&quot;kho-.*&quot;} |~ &quot;(?i)error|exception&quot; [15m]))
+→ 71
+</code></pre>
+<p><strong>Truy vấn 4 — phân bố mã trạng thái HTTP của Nginx</strong></p>
+<pre><code class="language-logql">topk(5, sum by (status) (count_over_time({container_name=&quot;kho-nginx&quot;} | regexp &quot;HTTP/1.1\&quot; (?P&lt;status&gt;[0-9]{3})&quot; [15m])))
+→ status=301 = 3
+</code></pre>
+<p><strong>Truy vấn 5 — top 5 đường dẫn được truy cập</strong></p>
+<pre><code class="language-logql">topk(5, sum by (path) (count_over_time({container_name=&quot;kho-nginx&quot;} | regexp &quot;\&quot;GET (?P&lt;path&gt;[^ ?\&quot;]+)&quot; [15m])))
+→ path=/ = 6 | path=/auth/login = 6 | path=/health = 6 | path=/nginx_status = 3
+</code></pre>
+<p>Mẫu dòng log thu được từ ứng dụng và Nginx:</p>
+<pre><code>[db] kết nối thành công kho_app@mysql:3306/kho_hang
+[web] Quản lý kho hàng chạy tại http://0.0.0.0:3000 (production)
+172.18.0.1 - - [19/Oct/2026:15:47:41 +0000] &quot;GET /nginx_status HTTP/1.1&quot; 301 162 &quot;-&quot; &quot;NGINX-Prometheus-Exporter/...&quot;
+</code></pre>
+<h3>4.6. Các biện pháp hardening</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Biện pháp</th>
+<th>Cài đặt</th>
+<th>Kiểm chứng</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><strong>Non-root container</strong></td>
+<td><code>app</code> chạy user <code>node</code> (uid 1000); <code>prometheus</code>, <code>grafana</code>, <code>loki</code>, <code>promtail</code>, <code>phpmyadmin</code>, <code>mysql-exporter</code> chạy user không phải root; Nginx chỉ cấp 4 capability tối thiểu, worker chạy user <code>nginx</code></td>
+<td><code>CapEff: 0000000000000000</code>, <code>NoNewPrivs: 1</code> trong container ứng dụng</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Network isolation</strong></td>
+<td>Mạng <code>kho-db</code> đặt <code>internal: true</code> (không NAT); MySQL, phpMyAdmin, mysql-exporter chỉ nằm trong mạng này</td>
+<td><code>docker network inspect kho-db</code> → <code>Internal: true</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Không mở cổng DB</strong></td>
+<td>Chỉ Nginx có <code>ports</code>; MySQL/phpMyAdmin/Grafana/Prometheus/Loki không publish</td>
+<td><code>docker compose ps</code> chỉ hiện <code>0.0.0.0:8080</code> và <code>0.0.0.0:8443</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Mật khẩu mạnh</strong></td>
+<td><code>scripts/gen-secrets.sh</code> sinh mật khẩu ngẫu nhiên 28 ký tự cho MySQL root/app/exporter, Grafana, session, tài khoản giám sát; <code>.env</code> không commit</td>
+<td>File <code>.env</code> trong <code>.gitignore</code>; mật khẩu không xuất hiện trong mã nguồn</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Hạn chế quyền DB</strong></td>
+<td>Ứng dụng dùng user <code>kho_app</code> chỉ trên database <code>kho_hang</code>; user <code>exporter</code> chỉ có <code>PROCESS, REPLICATION CLIENT, SELECT</code>; MySQL chạy với <code>--skip-name-resolve</code></td>
+<td>Script <code>db/init/10-monitoring-user.sh</code> tạo user giám sát với đúng 3 quyền đó</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Security headers + TLS</strong></td>
+<td>6 header bảo mật, TLS 1.2/1.3, HSTS, <code>server_tokens off</code>, giới hạn kích thước request 1 MB</td>
+<td>Xem mục 4.3</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>Xác thực hai lớp</strong></td>
+<td>Nginx basic auth + đăng nhập riêng của ứng dụng (bcrypt), Grafana (auth proxy), phpMyAdmin</td>
+<td>Không tài khoản → 401</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>Read-only rootfs</strong></td>
+<td><code>read_only: true</code> + <code>tmpfs</code> cho <code>/tmp</code> ở app, nginx, prometheus, loki, promtail, phpmyadmin</td>
+<td>Trong compose</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>Giới hạn tài nguyên</strong></td>
+<td><code>deploy.resources.limits</code> cho memory/CPU mọi service</td>
+<td>Trong compose</td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>Healthcheck &amp; phụ thuộc</strong></td>
+<td>App và MySQL có healthcheck; Nginx chỉ khởi động sau khi app healthy</td>
+<td><code>kho-app Up (healthy)</code>, <code>kho-mysql Up (healthy)</code></td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong>Giới hạn log</strong></td>
+<td>Driver <code>json-file</code>, <code>max-size=10m</code>, <code>max-file=3</code></td>
+<td><code>/etc/docker/daemon.json</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. KIỂM THỬ VÀ ĐÁNH GIÁ CHẤT LƯỢNG</h2>
+<p>Chi tiết đầy đủ nằm trong <code>docs/quality-checklist.md</code>. Tóm tắt những gì đã <strong>thực sự chạy</strong>:</p>
+<h3>5.1. Kiểm thử chức năng</h3>
+<table>
+<thead>
+<tr>
+<th>Nghiệp vụ</th>
+<th>Cách kiểm tra</th>
+<th>Kết quả</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Đăng nhập / đăng xuất</td>
+<td>Thao tác thật trên trình duyệt</td>
+<td>Đạt — session cookie <code>httpOnly</code>, <code>sameSite=Lax</code></td>
+</tr>
+<tr>
+<td>Ghi nhập hàng</td>
+<td>Chọn NCC + 1 mã hàng + 40 đơn vị, lưu</td>
+<td>Đạt — sinh phiếu <code>NH-2026-0039</code>, tồn tăng đúng 40</td>
+</tr>
+<tr>
+<td>Ghi xuất hàng</td>
+<td>Xuất 5 đơn vị</td>
+<td>Đạt — sinh phiếu <code>XH-2026-0023</code>, tồn giảm 80 → 75</td>
+</tr>
+<tr>
+<td><strong>Chặn xuất vượt tồn</strong></td>
+<td>Xuất 99 999 đơn vị khi còn 75</td>
+<td>Đạt — cảnh báo tại dòng <em>&quot;Vượt tồn hiện có (75 cái)&quot;</em>, server trả lỗi <em>&quot;Tồn kho không đủ để xuất: DT-0034 (còn 75, cần 99999)&quot;</em>, tồn <strong>không đổi</strong></td>
+</tr>
+<tr>
+<td>Thêm / sửa / xoá mã hàng</td>
+<td>Thao tác thật</td>
+<td>Đạt — có toast <em>&quot;Đã thêm sản phẩm TEST-001.&quot;</em></td>
+</tr>
+<tr>
+<td>Lọc danh mục, tồn kho, sổ kho</td>
+<td>Truy vấn <code>?q=</code>, <code>?filter=</code>, <code>?type=</code></td>
+<td>Đạt — lọc theo từ khoá cho 1 dòng, <code>filter=low</code> cho 9 dòng, <code>type=OUT</code> cho 20 dòng</td>
+</tr>
+<tr>
+<td>Phân trang</td>
+<td>28 mã hàng / 12 trang</td>
+<td>Đạt — 3 trang, trang 3 còn 4 dòng</td>
+</tr>
+<tr>
+<td>Console trình duyệt</td>
+<td><code>bsk console</code> sau mỗi lượt</td>
+<td>Đạt — <em>&quot;no console messages captured&quot;</em></td>
+</tr>
+</tbody></table>
+<h3>5.2. Kiểm thử giao diện và trải nghiệm</h3>
+<ul>
+<li><strong>Responsive</strong>: đo trực tiếp <code>scrollWidth</code>/<code>clientWidth</code> ở 390 px trên cả 6 trang → <strong>không tràn ngang</strong> (sau khi sửa lỗi ô lưới không co lại được).</li>
+<li><strong>Tiếng Việt</strong>: kiểm tra dấu ở cả 4 weight trên trình duyệt — đạt.</li>
+<li><strong>Bàn phím</strong>: Tab dừng ở các mục điều hướng, focus hiện viền 2 px màu primary.</li>
+<li><strong>Giảm chuyển động</strong>: <code>prefers-reduced-motion: reduce</code> → <code>transitionDuration = 0,01 ms</code>.</li>
+<li><strong>Tương phản</strong>: đo bằng công thức WCAG 2.1 cho từng cặp màu trong design system.</li>
+<li><strong>Tốc độ</strong>: các trang dữ liệu trả về trong <strong>53 – 111 ms</strong> trên mạng nội bộ.</li>
+</ul>
+<h3>5.3. Lỗi phát hiện và đã sửa trong quá trình làm</h3>
+<table>
+<thead>
+<tr>
+<th>Lỗi</th>
+<th>Biểu hiện</th>
+<th>Nguyên nhân</th>
+<th>Cách sửa</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>KPI &quot;Phiếu 30 ngày&quot; hiển thị <code>3.422</code></td>
+<td>Nối chuỗi <code>&quot;34&quot; + &quot;22&quot;</code> trong JavaScript</td>
+<td>MySQL trả <code>SUM()</code> dạng chuỗi</td>
+<td>Ép kiểu <code>Number()</code> trước khi cộng</td>
+</tr>
+<tr>
+<td>Tràn ngang ở 390 px</td>
+<td><code>scrollWidth</code> 658 &gt; <code>clientWidth</code> 390</td>
+<td>Ô lưới có <code>min-width: auto</code>, bị bảng trong đẩy rộng</td>
+<td>Thêm <code>min-width: 0</code> cho item của lưới</td>
+</tr>
+<tr>
+<td>Nút menu hiện trên desktop</td>
+<td>Nút &quot;Mở menu&quot; xuất hiện ở khung 1440 px</td>
+<td><code>.btn</code> đè lên <code>.topbar__toggle</code> (cùng độ ưu tiên, file CSS đặt sau)</td>
+<td>Tăng độ ưu tiên selector</td>
+</tr>
+<tr>
+<td>Thông báo vượt tồn bằng tiếng Anh</td>
+<td>Trình duyệt chặn submit bằng thông báo native</td>
+<td>Thuộc tính <code>max</code> trên ô số lượng</td>
+<td>Bỏ <code>max</code>, thêm cảnh báo tiếng Việt ngay tại dòng, vẫn để server kiểm tra</td>
+</tr>
+<tr>
+<td>Ứng dụng treo không phản hồi</td>
+<td>Mọi request đều timeout</td>
+<td>Middleware <code>metrics</code> <strong>quên gọi <code>next()</code></strong> nên chuỗi middleware dừng</td>
+<td>Bổ sung <code>next()</code></td>
+</tr>
+<tr>
+<td>Nginx không khởi động</td>
+<td><code>unknown directive &quot;﻿#&quot;</code></td>
+<td>File cấu hình bị <strong>BOM</strong> (UTF-8 BOM) do công cụ soạn thảo Windows</td>
+<td>Ghi lại file không BOM</td>
+</tr>
+<tr>
+<td>Nginx lỗi <code>chown ... Operation not permitted</code></td>
+<td>Container restart liên tục</td>
+<td><code>cap_drop: ALL</code> chặn <code>CHOWN</code> lúc khởi động</td>
+<td>Cấp đúng 4 capability tối thiểu</td>
+</tr>
+<tr>
+<td>phpMyAdmin báo lỗi đọc cấu hình</td>
+<td><code>Failed to open stream</code></td>
+<td>Đường dẫn trong image là <code>/etc/phpmyadmin</code> (chữ thường) nhưng mount <code>/etc/phpMyAdmin</code></td>
+<td>Sửa đường dẫn mount (Linux phân biệt hoa thường)</td>
+</tr>
+<tr>
+<td>mysqld_exporter không đăng nhập được</td>
+<td><code>Access denied ... (using password: NO)</code></td>
+<td>Exporter chỉ đọc mật khẩu từ file <code>.my.cnf</code>, không đọc biến môi trường</td>
+<td>Sinh <code>my.cnf</code> từ <code>.env</code>; tách <code>host</code> và <code>port</code> thành hai dòng</td>
+</tr>
+<tr>
+<td>Grafana &quot;Failed to load dashboard&quot;</td>
+<td>Panel báo <em>No data</em></td>
+<td>Dashboard tham chiếu datasource bằng placeholder <code>${datasource}</code></td>
+<td>Ghim UID thật (<code>prometheus</code>, <code>loki</code>) trong provisioning</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN</h2>
+<h3>6.1. Kết luận</h3>
+<p>Hệ thống đã hoàn thành đầy đủ 6 yêu cầu chung và 7 tiêu chí đánh giá của đề tài:</p>
+<table>
+<thead>
+<tr>
+<th>Tiêu chí</th>
+<th>Kết quả</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. Quản lý mã nguồn trên GitHub</td>
+<td>Repository <code>DTC245200428</code>, 5 commit theo mốc, README hướng dẫn chạy đầy đủ</td>
+</tr>
+<tr>
+<td>2. Triển khai ứng dụng + DB</td>
+<td>11 container chạy bằng Docker Compose; MySQL 8.0.46 + phpMyAdmin 5.2.3 với 7 bảng và dữ liệu mẫu</td>
+</tr>
+<tr>
+<td>3. Nginx reverse proxy</td>
+<td>HTTP 8080 → 301 → HTTPS 8443, chứng thư tự ký, 6 security headers, basic auth cho công cụ quản trị</td>
+</tr>
+<tr>
+<td>4. Prometheus + Grafana</td>
+<td>4/4 mục tiêu <code>up</code>, 792 chỉ số MySQL, dashboard 8 panel provision sẵn, 4 luật cảnh báo</td>
+</tr>
+<tr>
+<td>5. Loki + LogQL</td>
+<td>5 truy vấn LogQL chạy thật, gom log 11 container qua Promtail</td>
+</tr>
+<tr>
+<td>6. Hardening</td>
+<td>11 biện pháp: non-root, network isolation, mật khẩu mạnh, hạn chế quyền DB, read-only rootfs, cap_drop, security headers, giới hạn tài nguyên, healthcheck, giới hạn log, xác thực hai lớp</td>
+</tr>
+<tr>
+<td>7. Tổng thể &amp; trình bày</td>
+<td>Hệ thống chạy hoàn chỉnh bằng <code>docker compose up -d</code>; 17 ảnh chụp từ hệ thống đang chạy; báo cáo này</td>
+</tr>
+</tbody></table>
+<h3>6.2. Hướng phát triển</h3>
+<ol>
+<li><strong>Quản lý nhiều kho và vị trí lưu kho</strong> — bổ sung bảng <code>locations</code>, cho phép tồn theo từng khu vực, phục vụ nghiệp vụ 3PL.</li>
+<li><strong>Quản lý lô/serial và hạn sử dụng</strong> — thêm bảng <code>product_batches</code>, cảnh báo hàng sắp hết hạn.</li>
+<li><strong>Đơn hàng bán ra</strong> — dùng cột <code>stocks.committed</code> đã dự phòng để trừ lượng đã cam kết, tách <em>tồn thực</em> và <em>khả dụng</em>.</li>
+<li><strong>Quét mã vạch bằng điện thoại</strong> — ứng dụng đã responsive ở 390 px, sẵn sàng bổ sung chức năng quét và chế độ nhập nhanh.</li>
+<li><strong>Cảnh báo chủ động</strong> — nối luật cảnh báo Prometheus với Alertmanager để gửi cảnh báo qua email/Telegram.</li>
+<li><strong>Sao lưu tự động</strong> — thêm service <code>backup</code> định kỳ <code>mysqldump</code> vào volume riêng, kèm lịch giữ lại.</li>
+</ol>
+<h3>6.3. Bài học kinh nghiệm</h3>
+<ul>
+<li>Docker Compose cho phép cô lập toàn bộ hệ thống chỉ bằng một lệnh, nhưng mỗi dịch vụ nằm trong một container riêng thì đường dẫn cấu hình, quyền sở hữu tệp và ký tự BOM đều trở thành nguồn lỗi — cần kiểm tra log container ngay khi triển khai.</li>
+<li>Đo tương phản màu và kiểm tra tiếng Việt ngay từ đầu giúp tiết kiệm thời gian sửa giao diện về sau.</li>
+<li>Ghi log ra <code>stdout</code> thay vì ghi tệp là điều kiện tiên quyết để hệ thống log tập trung bắt được log của web server.</li>
+<li>Phân quyền ở hai tầng (mạng nội bộ + basic auth + đăng nhập ứng dụng) cho phép mở đường dẫn quản trị mà không phải hy sinh bảo mật.</li>
+</ul>
+<hr>
+<h2>7. TÀI LIỆU THAM KHẢO</h2>
+<ol>
+<li>Odoo 19 Documentation — <em>Inventory dashboards</em>. <a href="https://www.odoo.com/documentation/19.0/applications/inventory_and_mrp/inventory/warehouses_storage/reporting/dashboards.html">https://www.odoo.com/documentation/19.0/applications/inventory_and_mrp/inventory/warehouses_storage/reporting/dashboards.html</a></li>
+<li>Microsoft Dynamics 365 Business Central — <em>Inventory and warehouse reports and analytics</em>. <a href="https://learn.microsoft.com/en-us/dynamics365/business-central/inventory-wms-reports">https://learn.microsoft.com/en-us/dynamics365/business-central/inventory-wms-reports</a></li>
+<li>StockFlow — <em>Warehouse operations with a real stock ledger</em>. <a href="https://www.stock-flow.dev/">https://www.stock-flow.dev/</a></li>
+<li>StockSight — <em>Real-time inventory analytics dashboard (Flask + MySQL)</em>. <a href="https://github.com/NagaprajwalB/StockSight">https://github.com/NagaprajwalB/StockSight</a></li>
+<li>Docker Documentation — Compose file reference, networks (<code>internal</code>), resource limits, healthcheck. <a href="https://docs.docker.com/">https://docs.docker.com/</a></li>
+<li>NGINX Documentation — Reverse proxy, <code>stub_status</code>, <code>auth_basic</code>, security headers. <a href="https://nginx.org/en/docs/">https://nginx.org/en/docs/</a></li>
+<li>Prometheus Documentation — Configuration, metric types, alerting rules. <a href="https://prometheus.io/docs/">https://prometheus.io/docs/</a></li>
+<li>Grafana Documentation — Provisioning (datasources, dashboards), auth proxy. <a href="https://grafana.com/docs/grafana/latest/">https://grafana.com/docs/grafana/latest/</a></li>
+<li>Grafana Loki Documentation — LogQL queries, <code>count_over_time</code>, label filters, regex parser. <a href="https://grafana.com/docs/loki/latest/">https://grafana.com/docs/loki/latest/</a></li>
+<li>Promtail Documentation — Docker service discovery, <code>docker_sd_configs</code>. <a href="https://grafana.com/docs/loki/latest/send-data/promtail/">https://grafana.com/docs/loki/latest/send-data/promtail/</a></li>
+<li>Node.js, Express, EJS, MySQL 8 documentation. <a href="https://nodejs.org/">https://nodejs.org/</a> · <a href="https://expressjs.com/">https://expressjs.com/</a> · <a href="https://ejs.co/">https://ejs.co/</a> · <a href="https://dev.mysql.com/doc/">https://dev.mysql.com/doc/</a></li>
+<li>Be Vietnam Pro (SIL OFL 1.1) · Lucide (ISC) · Chart.js (MIT) — giấy phép tài nguyên trong <code>public/vendor/licenses/</code>.</li>
+</ol>
+<hr>
+<h2>8. PHỤ LỤC</h2>
+<h3>8.1. Danh mục dịch vụ và cổng</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Cổng trong container</th>
+<th>Cổng công khai</th>
+<th>Ghi chú</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>nginx</td>
+<td>8080, 8443</td>
+<td><strong>8080, 8443</strong></td>
+<td>Điểm vào duy nhất</td>
+</tr>
+<tr>
+<td>app</td>
+<td>3000</td>
+<td>—</td>
+<td>Chỉ trong <code>kho-net</code></td>
+</tr>
+<tr>
+<td>mysql</td>
+<td>3306</td>
+<td>—</td>
+<td>Chỉ trong <code>kho-db</code> (internal)</td>
+</tr>
+<tr>
+<td>phpmyadmin</td>
+<td>80</td>
+<td>—</td>
+<td>Qua <code>/phpmyadmin/</code></td>
+</tr>
+<tr>
+<td>prometheus</td>
+<td>9090</td>
+<td>—</td>
+<td>Qua <code>/prometheus/</code></td>
+</tr>
+<tr>
+<td>grafana</td>
+<td>3000</td>
+<td>—</td>
+<td>Qua <code>/grafana/</code></td>
+</tr>
+<tr>
+<td>loki</td>
+<td>3100</td>
+<td>—</td>
+<td>Qua <code>/loki/</code></td>
+</tr>
+<tr>
+<td>promtail</td>
+<td>9080</td>
+<td>—</td>
+<td>Chỉ trong <code>kho-net</code></td>
+</tr>
+<tr>
+<td>node-exporter</td>
+<td>9100</td>
+<td>—</td>
+<td>Chỉ trong <code>kho-net</code></td>
+</tr>
+<tr>
+<td>mysql-exporter</td>
+<td>9104</td>
+<td>—</td>
+<td>Chỉ trong <code>kho-net</code></td>
+</tr>
+<tr>
+<td>nginx-exporter</td>
+<td>9113</td>
+<td>—</td>
+<td>Chỉ trong <code>kho-net</code></td>
+</tr>
+</tbody></table>
+<h3>8.2. Tài khoản demo</h3>
+<table>
+<thead>
+<tr>
+<th>Hệ thống</th>
+<th>Tài khoản</th>
+<th>Mật khẩu</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ứng dụng</td>
+<td><code>admin</code></td>
+<td><code>Kho@2026</code></td>
+</tr>
+<tr>
+<td>MySQL (phpMyAdmin)</td>
+<td><code>kho_app</code></td>
+<td>trong <code>.env</code> (<code>MYSQL_PASSWORD</code>)</td>
+</tr>
+<tr>
+<td>Grafana / basic auth Nginx</td>
+<td><code>monitoring</code></td>
+<td>trong <code>.env</code> (<code>MONITORING_PASSWORD</code>)</td>
+</tr>
+<tr>
+<td>Grafana admin (quản trị)</td>
+<td><code>admin</code></td>
+<td>trong <code>.env</code> (<code>GRAFANA_ADMIN_PASSWORD</code>)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Toàn bộ mật khẩu thật được sinh ngẫu nhiên bằng <code>openssl rand</code> và lưu trong <code>.env</code> — <strong>không</strong> có trong mã nguồn. Bảng trên chỉ liệt kê tài khoản mẫu của ứng dụng (<code>admin</code> / <code>Kho@2026</code>) do <code>scripts/seed.js</code> tạo.</p>
+</blockquote>
+<h3>8.3. Ảnh minh họa</h3>
+<table>
+<thead>
+<tr>
+<th>Ảnh</th>
+<th>Nội dung</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>01-tong-quan-desktop.png</code></td>
+<td>Tổng quan kho (bản chạy cục bộ)</td>
+</tr>
+<tr>
+<td><code>02-ton-kho-desktop.png</code></td>
+<td>Danh sách tồn kho với bộ lọc trạng thái</td>
+</tr>
+<tr>
+<td><code>03-danh-muc-san-pham.png</code></td>
+<td>Danh mục sản phẩm</td>
+</tr>
+<tr>
+<td><code>04-phieu-nhap-hang.png</code></td>
+<td>Phiếu nhập hàng nhiều dòng</td>
+</tr>
+<tr>
+<td><code>05-lich-su-giao-dich.png</code></td>
+<td>Sổ kho, lọc theo loại phiếu</td>
+</tr>
+<tr>
+<td><code>07-tong-quan-mobile.png</code></td>
+<td>Tổng quan ở khung nhìn 390 px</td>
+</tr>
+<tr>
+<td><code>11-docker-dashboard.png</code></td>
+<td>Tổng quan khi chạy trong Docker Compose (qua Nginx + TLS)</td>
+</tr>
+<tr>
+<td><code>12-phpmyadmin.png</code></td>
+<td>phpMyAdmin — bảng <code>kho_hang</code> trong MySQL 8.0.46</td>
+</tr>
+<tr>
+<td><code>13-grafana.png</code></td>
+<td>Grafana (đăng nhập qua auth proxy của Nginx)</td>
+</tr>
+<tr>
+<td><code>14-prometheus-targets.png</code></td>
+<td>Prometheus — 4 mục tiêu đều <code>up</code></td>
+</tr>
+<tr>
+<td><code>15-grafana-dashboard.png</code></td>
+<td>Dashboard giám sát với số liệu thật</td>
+</tr>
+</tbody></table>
+<h3>8.4. Lệnh vận hành thường dùng</h3>
+<pre><code class="language-bash">docker compose ps                 # trạng thái 11 container
+docker compose logs -f app        # log ứng dụng
+docker compose restart app        # khởi động lại ứng dụng
+docker compose exec mysql mysql -ukho_app -p kho_hang -e &quot;SELECT COUNT(*) FROM stock_movements;&quot;
+docker compose down               # dừng toàn bộ (giữ dữ liệu)
+docker compose down -v            # dừng và xoá volume
+</code></pre>
+
+</body>
+</html>
